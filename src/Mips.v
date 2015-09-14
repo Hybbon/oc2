@@ -74,7 +74,7 @@ module Mips (
     assign hb_mask = 1'b0;
     assign lb_mask = 1'b0;
     assign chip_en = 1'b0;
-	assign memout = mc_if_data;
+    assign memout = mc_if_data;
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
