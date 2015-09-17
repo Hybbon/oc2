@@ -2,12 +2,12 @@
 // (Adaptação do módulo Ram.v)
 
 module Ram (
-    input    [7:0]    addr,     // Endereço a ser lido/escrito
+    input    [6:0]    addr,     // Endereço a ser lido/escrito
     inout    [31:0]   data,     // Dados lidos/a ser escritos
     input             wre       // 0: Leitura, 1: Escrita
 );
 
-    reg     [31:0]    memory    [0:255];
+    reg     [31:0]    memory    [0:127];
     wire    [31:0]    q;
 
     assign q = memory[addr];

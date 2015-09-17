@@ -3,7 +3,7 @@
 `include "../src/Ram32.v"
 
 module Ram32_TB0;
-    reg [7:0] addr; // Endereço a ser lido/escrito
+    reg [6:0] addr;   // Endereço a ser lido/escrito
     wire [31:0] data; // Fio auxiliar - inout só interage com fios
                       // (Definido como Z para leitura, definido como o valor
                       // a ser escrito para escrita)
@@ -31,14 +31,14 @@ module Ram32_TB0;
 
     initial begin
         wre <= 1'b1;
-        addr[7:0] <= 8'h00;
+        addr[6:0] <= 7'b0000000;
         data_r[31:0] <= 32'hBBBBBBBB;
 
-        #10 addr[7:0] <= 8'h01;
+        #10 addr[6:0] <= 7'b0000001;
         data_r[31:0] <= 32'hAAAAAAAA;
 
         #10 wre <= 1'b0;
-        addr[7:0] <= 8'h00;
+        addr[6:0] <= 7'b0000000;
 
         #500 $finish;
     end 
