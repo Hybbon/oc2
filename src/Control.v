@@ -1,3 +1,6 @@
+`ifndef CONTROL_V
+`define CONTROL_V
+
 module Control (
     input     [5:0]    op,
     input     [5:0]    fn,
@@ -68,3 +71,5 @@ module Control (
     end
 
 endmodule
+
+`endif

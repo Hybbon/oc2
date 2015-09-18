@@ -1,3 +1,6 @@
+`ifndef REGISTERS_V
+`define REGISTERS_V
+
 module Registers (
     input                   clock,
     input                   reset,
@@ -46,3 +49,5 @@ module Registers (
     endgenerate
 
 endmodule
+
+`endif

@@ -1,3 +1,6 @@
+`ifndef MIPS_V
+`define MIPS_V
+
 `include "./Fetch.v"
 `include "./Decode.v"
 `include "./Execute.v"
@@ -172,3 +175,5 @@ module Mips (
     );
 
 endmodule
+
+`endif

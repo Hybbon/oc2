@@ -1,3 +1,6 @@
+`ifndef FETCH_V
+`define FETCH_V
+
 `include "./Ram32.v"
 
 module Fetch (
@@ -12,7 +15,7 @@ module Fetch (
     input         [31:0]    id_if_rega,
     input         [31:0]    id_if_pcimd2ext,
     input         [31:0]    id_if_pcindex,
-    input         [1:0]     id_if_selpctype,
+    input         [1:0]     id_if_selpctype
 );
 
     reg    [31:0]   pc;
@@ -63,3 +66,5 @@ module Fetch (
     end
 
 endmodule
+
+`endif

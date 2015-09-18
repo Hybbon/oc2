@@ -1,3 +1,6 @@
+`ifndef DECODE_V
+`define DECODE_V
+
 `include "./Comparator.v"
 `include "./Control.v"
 
@@ -112,3 +115,5 @@ module Decode (
     end
 
 endmodule
+
+`endif

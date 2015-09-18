@@ -1,3 +1,6 @@
+`ifndef WRITEBACK_V
+`define WRITEBACK_V
+
 module Writeback (
     //Memory
     input    [4:0]     mem_wb_regdest,
@@ -14,3 +17,5 @@ module Writeback (
     assign wb_reg_data = mem_wb_wbvalue;
 
 endmodule
+
+`endif

@@ -1,6 +1,9 @@
 // Ram32.v - RAM de 128 palavras de 32 bits cada
 // (Adaptação do módulo Ram.v)
 
+`ifndef RAM32_V
+`define RAM32_V
+
 module Ram (
     input    [6:0]    addr,     // Endereço a ser lido/escrito
     inout    [31:0]   data,     // Dados lidos/a ser escritos
@@ -27,3 +30,5 @@ module Ram (
     end
     
 endmodule
+
+`endif

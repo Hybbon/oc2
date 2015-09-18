@@ -1,3 +1,6 @@
+`ifndef EXECUTE_V
+`define EXECUTE_V
+
 `include "./Alu.v"
 `include "./Shifter.v"
 
@@ -65,3 +68,5 @@ module Execute (
     end
 
  endmodule
+
+`endif

@@ -1,3 +1,6 @@
+`ifndef SHIFTER_V
+`define SHIFTER_V
+
 module Shifter (
     input     [31:0]     in,
     input     [1:0]      shiftop,
@@ -19,3 +22,5 @@ module Shifter (
     end
 
 endmodule
+
+`endif

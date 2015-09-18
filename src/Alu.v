@@ -1,3 +1,6 @@
+`ifndef ALU_V
+`define ALU_V
+
 module Alu (
     input     [31:0]    a,
     input     [31:0]    b,
@@ -34,3 +37,5 @@ module Alu (
     end
 
 endmodule
+
+`endif

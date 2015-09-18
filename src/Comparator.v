@@ -1,3 +1,6 @@
+`ifndef COMPARATOR_V
+`define COMPARATOR_V
+
 module Comparator (
     input     [31:0]    a,
     input     [31:0]    b,
@@ -22,3 +25,5 @@ module Comparator (
     end
 
 endmodule
+
+`endif

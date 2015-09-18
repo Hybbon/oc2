@@ -1,3 +1,6 @@
+`ifndef MEMORY_V
+`define MEMORY_V
+
 `include "./Ram32.v"
 
 module Memory (
@@ -41,7 +44,7 @@ module Memory (
             mem_wb_regdest <= ex_mem_regdest;
             mem_wb_writereg <= ex_mem_writereg;
             if (ex_mem_selwsource==1'b1) begin
-                mem_wb_wbvalue <= mem_mc_data;
+                mem_wb_wbvalue <= data_data;
             end else begin
                 mem_wb_wbvalue <= ex_mem_wbvalue;
             end
@@ -49,3 +52,5 @@ module Memory (
     end
 
 endmodule
+
+`endif
