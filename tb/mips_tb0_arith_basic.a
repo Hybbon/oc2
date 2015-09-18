@@ -1,0 +1,8 @@
+nop
+nop
+addi $s0, $zero, 13
+addi $s1, $zero, 7
+nop
+nop
+addi $s2, $s0, 2
+add $s3, $s0, $s1
