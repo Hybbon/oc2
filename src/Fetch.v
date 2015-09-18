@@ -1,7 +1,7 @@
 `ifndef FETCH_V
 `define FETCH_V
 
-`include "./Ram32.v"
+`include "./src/Ram32.v"
 
 module Fetch (
     input                   clock,

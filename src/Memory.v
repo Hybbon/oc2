@@ -1,7 +1,7 @@
 `ifndef MEMORY_V
 `define MEMORY_V
 
-`include "./Ram32.v"
+`include "./src/Ram32.v"
 
 module Memory (
     input                   clock,

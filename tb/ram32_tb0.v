@@ -1,6 +1,6 @@
 // Ram32_tb0.v - Testbench para o módulo Ram32
 
-`include "../src/Ram32.v"
+`include "./src/Ram32.v"
 
 module Ram32_TB0;
     reg [6:0] addr;   // Endereço a ser lido/escrito

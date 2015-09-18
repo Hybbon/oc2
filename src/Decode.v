@@ -1,8 +1,8 @@
 `ifndef DECODE_V
 `define DECODE_V
 
-`include "./Comparator.v"
-`include "./Control.v"
+`include "./src/Comparator.v"
+`include "./src/Control.v"
 
 module Decode (
     input                   clock,

@@ -1,8 +1,8 @@
 `ifndef EXECUTE_V
 `define EXECUTE_V
 
-`include "./Alu.v"
-`include "./Shifter.v"
+`include "./src/Alu.v"
+`include "./src/Shifter.v"
 
 module Execute (
     input                   clock,

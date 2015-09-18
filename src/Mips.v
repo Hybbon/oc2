@@ -1,12 +1,12 @@
 `ifndef MIPS_V
 `define MIPS_V
 
-`include "./Fetch.v"
-`include "./Decode.v"
-`include "./Execute.v"
-`include "./Memory.v"
-`include "./Writeback.v"
-`include "./Registers.v"
+`include "./src/Fetch.v"
+`include "./src/Decode.v"
+`include "./src/Execute.v"
+`include "./src/Memory.v"
+`include "./src/Writeback.v"
+`include "./src/Registers.v"
 
 module Mips (
     input clock,
