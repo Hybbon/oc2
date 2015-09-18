@@ -1,3 +1,6 @@
+`include "./Comparator.v"
+`include "./Control.v"
+
 module Decode (
     input                   clock,
     input                   reset,

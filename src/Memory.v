@@ -1,3 +1,5 @@
+`include "./Ram32.v"
+
 module Memory (
     input                   clock,
     input                   reset,
@@ -9,21 +11,26 @@ module Memory (
     input         [4:0]     ex_mem_regdest,
     input                   ex_mem_writereg,
     input         [31:0]    ex_mem_wbvalue,
-    //Memory Controller
-    output                  mem_mc_rw,
-    output                  mem_mc_en,
-    output        [17:0]    mem_mc_addr,
-    inout         [31:0]    mem_mc_data,
     //Writeback
     output reg    [4:0]     mem_wb_regdest,
     output reg              mem_wb_writereg,
     output reg    [31:0]    mem_wb_wbvalue
 );
 
-    assign mem_mc_rw = (!ex_mem_readmem & ex_mem_writemem);
-    assign mem_mc_en = (ex_mem_readmem | ex_mem_writemem);
-    assign mem_mc_addr = ex_mem_wbvalue[17:0];
-    assign mem_mc_data = (mem_mc_rw) ? ex_mem_regb : 32'hZZZZ_ZZZZ;
+
+    wire [6:0] data_addr;
+    wire [31:0] data_data; // lol
+    wire data_wre;
+
+    assign data_addr = ex_mem_wbvalue[8:2];
+    assign data_wre = (!ex_mem_readmem & ex_mem_writemem);
+    assign data_data = data_wre ? ex_mem_regb : 32'hZZZZ_ZZZZ;
+
+    Ram data_ram (
+        .addr(data_addr),
+        .data(data_data),
+        .wre(data_wre)
+    );
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin

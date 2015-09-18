@@ -1,3 +1,6 @@
+`include "./Alu.v"
+`include "./Shifter.v"
+
 module Execute (
     input                   clock,
     input                   reset,

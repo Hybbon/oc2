@@ -1,3 +1,5 @@
+`include "./Ram32.v"
+
 module Fetch (
     input                   clock,
     input                   reset,
@@ -11,28 +13,32 @@ module Fetch (
     input         [31:0]    id_if_pcimd2ext,
     input         [31:0]    id_if_pcindex,
     input         [1:0]     id_if_selpctype,
-    //Memory Controller
-    output reg              if_mc_en,
-    output        [17:0]    if_mc_addr,
-    input         [31:0]    mc_if_data
 );
 
     reg    [31:0]   pc;
 
-    assign if_mc_addr = pc[17:0];
+    wire [6:0] instr_addr;
+    wire [31:0] instr_data;
+    wire instr_wre = 1'b0;
+
+    assign instr_addr = pc[8:2];
+
+    Ram instr_ram (
+        .addr(instr_addr),
+        .data(instr_data),
+        .wre(instr_wre)
+    );
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
-            if_mc_en <= 1'b0;
             if_id_instruc <= 32'h0000_0000;
             pc <= 32'h0000_0000;
         end else begin
-            if_mc_en <= 1'b1;
             if (ex_if_stall) begin
                 if_id_instruc <= 32'h0000_0000;
                 if_id_nextpc <= pc;
             end else begin
-                if_id_instruc <= mc_if_data;
+                if_id_instruc <= instr_data;
                 if (id_if_selpcsource) begin
                     case (id_if_selpctype)
                         2'b00: pc <= id_if_pcimd2ext;
