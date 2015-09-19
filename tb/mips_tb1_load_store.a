@@ -1,0 +1,10 @@
+nop
+nop
+addi $t2, $zero, 0x10010000 # offset
+addi $t0, $t2, 0
+lw $s0, 0($t0)
+lw $s1, 4($t0)
+add $s2, $s1, $s0
+sw $s2, 8($t0)
+
+
