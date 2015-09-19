@@ -12,6 +12,8 @@ Tarefas
 
 ### Detalhes sobre o projeto para a placa ###
 
+**Modelo: Altera DE2 (EP2C35F672C6)**
+
 - Clock: `KEY[3]`
 - Reset: `KEY[2]`
 - Seleção de registrador a ser exibido nos displays de 7 segmentos: `KEY[1]` aciona, switches `[4:0]` escolhem
