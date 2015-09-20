@@ -58,8 +58,6 @@ module Mips (
     wire    [4:0]     wb_reg_addr;
     wire    [31:0]    wb_reg_data;
 
-    assign memout = mc_if_data;
-
     Fetch FETCH(
         .clock(clock),
         .reset(reset),
