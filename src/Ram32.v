@@ -28,7 +28,7 @@ module Ram (
         if (wre)
            memory[addr] = data[31:0];
     end
-    
+   
 endmodule
 
 `endif
