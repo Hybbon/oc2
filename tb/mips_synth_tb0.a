@@ -1,0 +1,25 @@
+nop
+nop
+addi $s0, $zero, 0x0
+addi $t0, $zero, 0x1414
+addi $t1, $zero, 0x4141
+nop
+nop
+nop
+sw $t0, 12($s0)
+nop
+nop
+nop
+sw $t1, 16($s0)
+nop
+nop
+nop
+lw $s1, 12($s0)
+nop
+nop
+nop
+lw $s2, 16($s0)
+nop
+nop
+nop
+add $s3, $s1, $s2

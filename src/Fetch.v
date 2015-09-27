@@ -15,7 +15,10 @@ module Fetch (
     input         [31:0]    id_if_rega,
     input         [31:0]    id_if_pcimd2ext,
     input         [31:0]    id_if_pcindex,
-    input         [1:0]     id_if_selpctype
+    input         [1:0]     id_if_selpctype,
+    // Used for ram initialization
+    input fetch_ram_load
+
 );
 
     reg    [31:0]   pc;
@@ -29,7 +32,10 @@ module Fetch (
     Ram instr_ram (
         .addr(instr_addr),
         .data(instr_data),
-        .wre(instr_wre)
+        .wre(instr_wre),
+        .instr_load(fetch_ram_load),
+        .data_load(1'b0),
+        .reset(reset)
     );
 
     always @(posedge clock or negedge reset) begin

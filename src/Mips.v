@@ -11,8 +11,12 @@
 module Mips (
     input clock,
     input reset,
+    // Register selection and data output to be displayed in the 7SDs
     input [4:0] reg_out_id,
-    output [31:0] reg_out_data
+    output [31:0] reg_out_data,
+    // Workaround to initialize the memory modules with data/instructions
+    input fetch_ram_load,
+    input mem_ram_load
 );
 
     wire              ex_if_stall;
@@ -68,7 +72,8 @@ module Mips (
         .id_if_rega(id_if_rega),
         .id_if_pcimd2ext(id_if_pcimd2ext),
         .id_if_pcindex(id_if_pcindex),
-        .id_if_selpctype(id_if_selpctype)
+        .id_if_selpctype(id_if_selpctype),
+        .fetch_ram_load(fetch_ram_load)
     );
 
     Decode DECODE(
@@ -144,7 +149,8 @@ module Mips (
         .ex_mem_wbvalue(ex_mem_wbvalue),
         .mem_wb_regdest(mem_wb_regdest),
         .mem_wb_writereg(mem_wb_writereg),
-        .mem_wb_wbvalue(mem_wb_wbvalue)
+        .mem_wb_wbvalue(mem_wb_wbvalue),
+        .mem_ram_load(mem_ram_load)
     );
 
     Writeback WRITEBACK(

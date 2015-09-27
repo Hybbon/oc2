@@ -3,7 +3,7 @@
 
 module mips_synth(
     input [3:1] KEY,
-    input [4:0] SW,
+    input [6:0] SW,
     output [0:6] HEX0,
     output [0:6] HEX1,
     output [0:6] HEX2,
@@ -19,8 +19,10 @@ module mips_synth(
     Mips mips(
         .clock(KEY[3]),
         .reset(KEY[2]),
-        .reg_out_id(SW),
-        .reg_out_data(reg_out_data)
+        .reg_out_id(SW[4:0]),
+        .reg_out_data(reg_out_data),
+        .fetch_ram_load(SW[5]),
+        .mem_ram_load(SW[6])
     );
 
     DisplayDecoder dd7(

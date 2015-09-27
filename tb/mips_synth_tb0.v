@@ -1,9 +1,3 @@
-/**
- * Testbench 1 - Load e Store
- * Esse testbench pretende testar a funcionalidade das instruções lw e sw não-
- * -extensivamente.
- */
-
 `include "./src/Mips.v"
 
 module Mips_TB;
@@ -26,23 +20,22 @@ module Mips_TB;
         .fetch_ram_load(fetch_ram_load),
         .mem_ram_load(mem_ram_load)
     );
-    
-    initial begin
-        $readmemh("../tb/mips_tb1_load_store.hex", mips.FETCH.instr_ram.memory);
-        $readmemh("../tb/mips_tb1_load_store_data.hex", mips.MEMORY.data_ram.memory);
 
-        $dumpfile("mips_tb1.vcd");
+    initial begin
+        $readmemh("../tb/mips_synth_tb0.hex", mips.FETCH.instr_ram.memory);
+
+        $dumpfile("mips_synth_tb0.vcd");
         $dumpvars;
 
-        $display("\t\t$s2\t$s3\t&8\t&12");
+        $display("\t\t$s1\t$s2\t&12\t&16");
         $monitor("\t%d%d%d\t%d",
+            mips.REGISTERS.registers[17],
             mips.REGISTERS.registers[18],
-            mips.REGISTERS.registers[19],
-            mips.MEMORY.data_ram.memory[2],
-            mips.MEMORY.data_ram.memory[3]
+            mips.MEMORY.data_ram.memory[3],
+            mips.MEMORY.data_ram.memory[4]
         );
 
-        #2000 $writememh("mips_tb1_load_store_data_out.hex", mips.MEMORY.data_ram.memory);
+        #2000 $writememh("mips_synth_tb0_data_out.hex", mips.MEMORY.data_ram.memory);
         #3000 $finish;
     end
 

@@ -13,7 +13,9 @@ module Ram32_TB0;
     Ram ram (
         .addr(addr),
         .data(data),
-        .wre(wre)
+        .wre(wre),
+        .instr_load(1'b0),
+        .data_load(1'b0)
     );
 
     // Permite o uso da interface bidirecional (inout)

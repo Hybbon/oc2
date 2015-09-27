@@ -1,0 +1,27 @@
+nop
+nop
+lw $s0, 8($zero)
+addi $t2, $zero, 12
+addi $t3, $zero, 4
+addi $1, $zero, 0x000014b8 # 0x014b8820 -> add $s1, $t2, $t3
+addi $t0, $zero, 12
+nop
+nop
+nop
+sllv $t1, $1, $t0 
+nop
+nop
+nop
+addi $t1, $t1, 0x00000820
+nop
+nop
+nop
+sw $t1, 0x64($zero)
+nop
+nop
+nop
+nop
+nop
+nop
+addi $s1, $zero, 15
+nop

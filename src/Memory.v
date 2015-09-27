@@ -17,7 +17,9 @@ module Memory (
     //Writeback
     output reg    [4:0]     mem_wb_regdest,
     output reg              mem_wb_writereg,
-    output reg    [31:0]    mem_wb_wbvalue
+    output reg    [31:0]    mem_wb_wbvalue,
+    // Used for ram initialization
+    input mem_ram_load
 );
 
 
@@ -32,7 +34,10 @@ module Memory (
     Ram data_ram (
         .addr(data_addr),
         .data(data_data),
-        .wre(data_wre)
+        .wre(data_wre),
+        .instr_load(1'b0),
+        .data_load(mem_ram_load),
+        .reset(reset)
     );
 
     always @(posedge clock or negedge reset) begin
