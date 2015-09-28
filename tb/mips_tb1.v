@@ -28,8 +28,8 @@ module Mips_TB;
     );
     
     initial begin
-        $readmemh("../tb/mips_tb1_load_store.hex", mips.FETCH.instr_ram.memory);
-        $readmemh("../tb/mips_tb1_load_store_data.hex", mips.MEMORY.data_ram.memory);
+        #10 $readmemh("../tb/mips_tb1_load_store.hex", mips.FETCH.instr_ram.memory);
+        #10 $readmemh("../tb/mips_tb1_load_store_data.hex", mips.MEMORY.data_ram.memory);
 
         $dumpfile("mips_tb1.vcd");
         $dumpvars;

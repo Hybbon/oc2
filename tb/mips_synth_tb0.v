@@ -22,15 +22,16 @@ module Mips_TB;
     );
 
     initial begin
-        $readmemh("../tb/mips_synth_tb0.hex", mips.FETCH.instr_ram.memory);
+        #10 $readmemh("../tb/mips_synth_tb0.hex", mips.FETCH.instr_ram.memory);
 
         $dumpfile("mips_synth_tb0.vcd");
         $dumpvars;
 
-        $display("\t\t$s1\t$s2\t&12\t&16");
-        $monitor("\t%d%d%d\t%d",
+        $display("\t\t$s1\t$s2\t$s3\t&12\t&16");
+        $monitor("\t%d%d%d%d\t%d",
             mips.REGISTERS.registers[17],
             mips.REGISTERS.registers[18],
+            mips.REGISTERS.registers[19],
             mips.MEMORY.data_ram.memory[3],
             mips.MEMORY.data_ram.memory[4]
         );

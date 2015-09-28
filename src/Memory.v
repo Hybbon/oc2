@@ -24,20 +24,21 @@ module Memory (
 
 
     wire [6:0] data_addr;
-    wire [31:0] data_data; // lol
+    wire [31:0] data_data_out; // lol
     wire data_wre;
 
     assign data_addr = ex_mem_wbvalue[8:2];
     assign data_wre = (!ex_mem_readmem & ex_mem_writemem);
-    assign data_data = data_wre ? ex_mem_regb : 32'hZZZZ_ZZZZ;
 
     Ram data_ram (
+        .clock(clock),
+        .reset(reset),
         .addr(data_addr),
-        .data(data_data),
+        .data_in(ex_mem_regb),
+        .data_out(data_data_out),
         .wre(data_wre),
         .instr_load(1'b0),
-        .data_load(mem_ram_load),
-        .reset(reset)
+        .data_load(mem_ram_load)
     );
 
     always @(posedge clock or negedge reset) begin
@@ -49,7 +50,7 @@ module Memory (
             mem_wb_regdest <= ex_mem_regdest;
             mem_wb_writereg <= ex_mem_writereg;
             if (ex_mem_selwsource==1'b1) begin
-                mem_wb_wbvalue <= data_data;
+                mem_wb_wbvalue <= data_data_out;
             end else begin
                 mem_wb_wbvalue <= ex_mem_wbvalue;
             end

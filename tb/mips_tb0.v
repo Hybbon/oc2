@@ -15,23 +15,17 @@ module Mips_TB;
     reg [4:0] reg_out_id;
     wire [31:0] reg_out_data;
 
-    wire fetch_ram_load;
-    wire mem_ram_load;
-
-    assign fetch_ram_load = 1'b0;
-    assign mem_ram_load = 1'b0;
-
     Mips mips(
         .clock(clock),
         .reset(reset),
         .reg_out_id(reg_out_id),
         .reg_out_data(reg_out_data),
-        .fetch_ram_load(fetch_ram_load),
-        .mem_ram_load(mem_ram_load)
+        .fetch_ram_load(1'b0),
+        .mem_ram_load(1'b0)
     );
 
     initial begin
-        $readmemh("../tb/mips_tb0_arith_basic.hex", mips.FETCH.instr_ram.memory);
+        #10 $readmemh("../tb/mips_tb0_arith_basic.hex", mips.FETCH.instr_ram.memory);
 
         $dumpfile("mips_tb0.vcd");
         $dumpvars;

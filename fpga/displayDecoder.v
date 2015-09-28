@@ -1,3 +1,6 @@
+`ifndef DISPLAYDECODER_V
+`define DISPLAYDECODER_V
+
 module DisplayDecoder(
     input [3:0] in,
     output reg [0:6] out
@@ -26,3 +29,5 @@ module DisplayDecoder(
     end
     
 endmodule
+
+`endif

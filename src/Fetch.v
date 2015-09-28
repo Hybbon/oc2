@@ -25,17 +25,17 @@ module Fetch (
 
     wire [6:0] instr_addr;
     wire [31:0] instr_data;
-    wire instr_wre = 1'b0;
 
     assign instr_addr = pc[8:2];
 
     Ram instr_ram (
+        .clock(clock),
+        .reset(reset),
         .addr(instr_addr),
-        .data(instr_data),
-        .wre(instr_wre),
+        .data_out(instr_data),
+        .wre(1'b0),
         .instr_load(fetch_ram_load),
-        .data_load(1'b0),
-        .reset(reset)
+        .data_load(1'b0)
     );
 
     always @(posedge clock or negedge reset) begin
