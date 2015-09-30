@@ -13,7 +13,7 @@ beq $t0, $t1, beqOk
 addi $t2, $zero, 20
 beqOk:
 bne $t4, $t0, bneOk
-addi $3, $zero, 20
+addi $t2, $zero, 20
 bneOk:
 blez $zero, blezOk
 addi $t2, $zero, 20
