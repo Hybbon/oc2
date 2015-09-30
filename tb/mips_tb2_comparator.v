@@ -41,7 +41,6 @@ module Mips_TB;
             mips.REGISTERS.registers[11]
         );
 
-        #2000 $writememh("mips_tb1_load_store_data_out.hex", mips.MEMORY.data_ram.memory);
         #3000 $finish;
     end
 
