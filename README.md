@@ -8,7 +8,7 @@ Tarefas
 
 1. Dividir a memória existente (que usa palavras de 16 bits) em duas memórias de palavras de 32 bits: uma para os dados e uma para as instruções (cada uma com 128 palavras) **[Feito]**
 2. Adaptar as instruções `lw` e `sw` para a nova memória **[Feito]**
-3. Instanciar o processador para uso na FPGA (mais detalhes abaixo)
+3. Instanciar o processador para uso na FPGA (mais detalhes abaixo) **[Feito]**
 
 ### Detalhes sobre o projeto para a placa ###
 
