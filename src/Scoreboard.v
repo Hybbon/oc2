@@ -19,8 +19,8 @@ module Scoreboard(
     input            enableclear    // prevent incorrect clear (e.g. during stalls)
 );
 
-    reg [31:0] rows[7:0];
-    reg [4:0] i;
+    reg [7:0] rows[31:0];
+    reg [5:0] i;
 
     // outputs requested register data
     assign ass_data = rows[ass_addr];
