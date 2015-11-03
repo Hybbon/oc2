@@ -6,24 +6,24 @@ module Scoreboard(
     input            reset,
 
     // inputs from issue stage, this is asynchronous
-    input      [4:0] ass_addr, // requested register
-    output     [7:0] ass_data, // register status and position
+    input      [4:0] ass_addr,      // requested register
+    output           ass_pending,   // register status
+    output     [1:0] ass_unit,      // register functional unit
+    output     [4:0] ass_row,       // register execution stage
 
     // inputs from issue stage
     input      [4:0] writeaddr,     // register to become pending
-    input      [1:0] registerstage, // which functional unit it is going to
-    input            enablewrite,   // prevent incorrect write (e.g. during stalls)
-
-    // inputs from writeback stage, clears register status
-    input      [4:0] clearaddr,     // register to clear
-    input            enableclear    // prevent incorrect clear (e.g. during stalls)
+    input      [1:0] registerunit,  // which functional unit it is going to
+    input            enablewrite   // prevent incorrect write (e.g. during stalls)
 );
 
     reg [7:0] rows[31:0];
     reg [5:0] i;
 
     // outputs requested register data
-    assign ass_data = rows[ass_addr];
+    assign ass_pending = rows[ass_addr][7];
+    assign ass_unit    = rows[ass_addr][6:5];
+    assign ass_row     = rows[ass_addr][4:0];
 
     always @(posedge clock or negedge reset) begin
         if(~reset) begin
@@ -37,15 +37,10 @@ module Scoreboard(
             for (i=0; i<32; i=i+1) begin
                 // updates the positions of the data
                 rows[i][4:0] = rows[i][4:0] >> 1;
-                if(rows[i][7] && rows[i][4:0] == 5'b00000) begin
-                    // register still on writeback stage
-                    rows[i][0] = 1'b1;
+                if(rows[i][4:0] == 5'b00000) begin
+                    // register is not pending anymore
+                    rows[i][7:5]  = 3'b0ZZ;
                 end
-            end
-
-            // clear registers gone through writeback
-            if(enableclear) begin
-                rows[clearaddr][7:0] = 8'b0ZZ00000;
             end
 
             // writes registers claimed on issue stage
@@ -53,7 +48,7 @@ module Scoreboard(
                 // the corresponding register becomes pending
                 // and we write its functional unity
                 rows[writeaddr][7] = 1'b1;
-                rows[writeaddr][6:5] = registerstage;
+                rows[writeaddr][6:5] = registerunit;
                 rows[writeaddr][4] = 1'b1;
             end
 
