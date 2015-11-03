@@ -1,6 +1,9 @@
 `ifndef ALUMISC_V
 `define ALUMISC_V
 
+`include "./src/Alu.v"
+`include "./src/Shifter.v"
+
 // shorthand: am -> a0 -> a1 -> a2 -> a3
 
 module AluMisc (
@@ -44,6 +47,9 @@ module AluMisc (
     // Immediate value (may be used as operand)
     input         [31:0]    iss_a0_imedext,
 
+    // Destination register
+    input         [4:0]     iss_a0_regdest,
+
     // Whether or not the instruction writes to the ARF
     input                   iss_a0_writereg,
 
@@ -65,7 +71,7 @@ module AluMisc (
     // Value to be written
     output reg    [31:0]    a3_wb_wbvalue,
 
-    output a3_wb_oper
+    output reg a3_wb_oper
 );
 
     wire    [31:0]    aluout;
@@ -150,5 +156,6 @@ module AluMisc (
         end
     end
 
+endmodule
 
 `endif
