@@ -19,12 +19,13 @@ module tb_scoreboard();
 
     integer cur_time;
 
+    // Doesn't test the second set of assynchronous i/o, for simplicity's sake
     Scoreboard s(.clock(clock),
                  .reset(reset),
-                 .ass_addr(readaddress),
-                 .ass_pending(valuepending),
-                 .ass_unit(valueunit),
-                 .ass_row(valuerow),
+                 .ass1_addr(readaddress),
+                 .ass1_pending(valuepending),
+                 .ass1_unit(valueunit),
+                 .ass1_row(valuerow),
                  .writeaddr(addrpending),
                  .registerunit(func_unit),
                  .enablewrite(enablewrite));
