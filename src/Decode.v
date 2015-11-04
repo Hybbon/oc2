@@ -28,9 +28,10 @@ module Decode (
     output        [31:0]    id_ex_regb,
     output reg    [31:0]    id_ex_imedext,
     output reg              id_ex_selwsource,
-    output reg    [4:0]     id_ex_regdest,
-    output reg              id_ex_writereg,
+    output reg    [4:0]     id_is_regdest,  // destination register
+    output reg              id_ex_writereg, 
     output reg              id_ex_writeov,
+    output reg              id_is_selregdest, // 1 if current instruction has 3 operands
 
     // Keeps the current instruction
     input                   is_stall;
@@ -99,6 +100,7 @@ module Decode (
             id_ex_writereg <= 1'b0;
             id_ex_writeov <= 1'b0;
             id_ex_imedext <= 32'h0000_0000;
+            id_is_selregdest <= 1'b0;
         end else begin
             // Fix stalls caused by issue stage
             if (~is_stall) begin
@@ -114,6 +116,7 @@ module Decode (
                 id_ex_writereg <= writereg;
                 id_ex_writeov <= writeov;
                 id_ex_imedext <= $signed(if_id_instruc[15:0]);
+                id_is_selregdest <= selregdest;
             end
         end
     end

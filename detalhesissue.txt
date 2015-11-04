@@ -1,0 +1,10 @@
+Considerações ao montar o módulo Mips.v:
+- Deve ter um fio ligando o is_stall do issue nas unidades de fetch e decode, para que elas travem corretamente quando houver stall
+- Issue tem que ser ligado no banco de registradores
+
+Potenciais problemas:
+- Não sei se o issue está repassando todos os dados necessários (ou se repassa dados desnecessários)
+
+O que falta no issue:
+- Decidir a unidade funcional da instrução
+- Ligar os fios corretos no Mips.v
