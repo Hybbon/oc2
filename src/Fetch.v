@@ -6,6 +6,8 @@
 module Fetch (
     input                   clock,
     input                   reset,
+    //Issue
+    input                   is_stall,
     //Execute
     input                   ex_if_stall,
     //Decode
@@ -43,7 +45,7 @@ module Fetch (
             if_id_instruc <= 32'h0000_0000;
             pc <= 32'h0000_0000;
         end else begin
-            if (ex_if_stall) begin
+            if (ex_if_stall || is_stall) begin
                 if_id_instruc <= 32'h0000_0000;
                 if_id_nextpc <= pc;
             end else begin

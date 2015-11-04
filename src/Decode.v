@@ -31,13 +31,14 @@ module Decode (
     output reg    [4:0]     id_ex_regdest,
     output reg              id_ex_writereg,
     output reg              id_ex_writeov,
+
+    // Keeps the current instruction
+    input                   is_stall;
     //Registers
     output        [4:0]     id_reg_addra,
     output        [4:0]     id_reg_addrb,
-    input         [31:0]    reg_id_dataa,
-    input         [31:0]    reg_id_datab,
-    input         [31:0]    reg_id_ass_dataa,
-    input         [31:0]    reg_id_ass_datab
+    // Register incoming data removed
+    // is now at issue stage
 );
 
     wire    [1:0]    selbrjumpz;
@@ -99,18 +100,21 @@ module Decode (
             id_ex_writeov <= 1'b0;
             id_ex_imedext <= 32'h0000_0000;
         end else begin
-            id_ex_selalushift <= selalushift;
-            id_ex_selimregb <= selimregb;
-            id_ex_aluop <= aluop;
-            id_ex_unsig <= unsig;
-            id_ex_shiftop <= shiftop;
-            id_ex_readmem <= readmem;
-            id_ex_writemem <= writemem;
-            id_ex_selwsource <= selwsource;
-            id_ex_regdest <= (selregdest) ? if_id_instruc[15:11] : if_id_instruc[20:16];
-            id_ex_writereg <= writereg;
-            id_ex_writeov <= writeov;
-            id_ex_imedext <= $signed(if_id_instruc[15:0]);
+            // Fix stalls caused by issue stage
+            if (~is_stall) begin
+                id_ex_selalushift <= selalushift;
+                id_ex_selimregb <= selimregb;
+                id_ex_aluop <= aluop;
+                id_ex_unsig <= unsig;
+                id_ex_shiftop <= shiftop;
+                id_ex_readmem <= readmem;
+                id_ex_writemem <= writemem;
+                id_ex_selwsource <= selwsource;
+                id_ex_regdest <= (selregdest) ? if_id_instruc[15:11] : if_id_instruc[20:16];
+                id_ex_writereg <= writereg;
+                id_ex_writeov <= writeov;
+                id_ex_imedext <= $signed(if_id_instruc[15:0]);
+            end
         end
     end
 

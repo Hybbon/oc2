@@ -62,9 +62,13 @@ module Mips (
     wire    [4:0]     wb_reg_addr;
     wire    [31:0]    wb_reg_data;
 
+    // Stall from the issue stage
+    wire              is_stall;
+
     Fetch FETCH(
         .clock(clock),
         .reset(reset),
+        .is_stall(is_stall),
         .ex_if_stall(ex_if_stall),
         .if_id_nextpc(if_id_nextpc),
         .if_id_instruc(if_id_instruc),
@@ -101,12 +105,9 @@ module Mips (
         .id_ex_regdest(id_ex_regdest),
         .id_ex_writereg(id_ex_writereg),
         .id_ex_writeov(id_ex_writeov),
+        .is_stall(is_stall),
         .id_reg_addra(id_reg_addra),
-        .id_reg_addrb(id_reg_addrb),
-        .reg_id_dataa(reg_id_dataa),
-        .reg_id_datab(reg_id_datab),
-        .reg_id_ass_dataa(reg_id_ass_dataa),
-        .reg_id_ass_datab(reg_id_ass_datab)
+        .id_reg_addrb(id_reg_addrb)
     );
 
     Execute EXECUTE(
