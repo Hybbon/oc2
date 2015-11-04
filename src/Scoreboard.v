@@ -6,10 +6,15 @@ module Scoreboard(
     input            reset,
 
     // inputs from issue stage, this is asynchronous
-    input      [4:0] ass_addr,      // requested register
-    output           ass_pending,   // register status
-    output     [1:0] ass_unit,      // register functional unit
-    output     [4:0] ass_row,       // register execution stage
+    input      [4:0] ass1_addr,      // requested register
+    output           ass1_pending,   // register status
+    output     [1:0] ass1_unit,      // register functional unit
+    output     [4:0] ass1_row,       // register execution stage
+
+    input      [4:0] ass2_addr,      // requested register
+    output           ass2_pending,   // register status
+    output     [1:0] ass2_unit,      // register functional unit
+    output     [4:0] ass2_row,       // register execution stage
 
     // inputs from issue stage
     input      [4:0] writeaddr,     // register to become pending
@@ -21,9 +26,13 @@ module Scoreboard(
     reg [5:0] i;
 
     // outputs requested register data
-    assign ass_pending = rows[ass_addr][7];
-    assign ass_unit    = rows[ass_addr][6:5];
-    assign ass_row     = rows[ass_addr][4:0];
+    assign ass1_pending = rows[ass1_addr][7];
+    assign ass1_unit    = rows[ass1_addr][6:5];
+    assign ass1_row     = rows[ass1_addr][4:0];
+    
+    assign ass2_pending = rows[ass2_addr][7];
+    assign ass2_unit    = rows[ass2_addr][6:5];
+    assign ass2_row     = rows[ass2_addr][4:0];
 
     always @(posedge clock or negedge reset) begin
         if(~reset) begin
