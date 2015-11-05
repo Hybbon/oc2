@@ -23,17 +23,13 @@ module Memory (
     input mem_ram_load
 );
 
-
-    wire [6:0] data_addr;
     wire [6:0] addr_mem_0;
     wire wre_mem_0;
-
-    assign data_addr = ex_mem_wbvalue[8:2];
 
     Mem_0 data_ram_0 (
         .clock(clock),
         .reset(reset),
-        .addr(data_addr),
+        .ex_mem_wbvalue(ex_mem_wbvalue),
         .ex_mem_readmem(ex_mem_readmem),
         .ex_mem_writemem(ex_mem_writemem),
         .addr_out(addr_mem_0),
