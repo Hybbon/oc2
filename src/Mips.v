@@ -3,6 +3,7 @@
 
 `include "./src/Fetch.v"
 `include "./src/Decode.v"
+`include "./src/Issue.v"
 `include "./src/Mult.v"
 `include "./src/AluMisc.v"
 `include "./src/Mem.v"
@@ -27,44 +28,44 @@ module Mips (
 );
 
     
-    wire              ex_mem_readmem;
-    wire              ex_mem_writemem;
-    wire    [31:0]    ex_mem_regb;
-    wire              ex_mem_selwsource;
-    wire    [4:0]     ex_mem_regdest;
-    wire              ex_mem_writereg;
-    wire    [31:0]    ex_mem_wbvalue;
-    wire    [4:0]     mem_wb_regdest;
-    wire              mem_wb_writereg;
-    wire    [31:0]    mem_wb_wbvalue;
-    wire              id_ex_selalushift;
-    wire              id_ex_selimregb;
-    wire    [2:0]     id_ex_aluop;
-    wire              id_ex_unsig;
-    wire    [1:0]     id_ex_shiftop;
-    wire    [4:0]     id_ex_shiftamt;
-    wire    [31:0]    id_ex_rega;
-    wire              id_ex_readmem;
-    wire              id_ex_writemem;
-    wire    [31:0]    id_ex_regb;
-    wire    [31:0]    id_ex_imedext;
-    wire              id_ex_selwsource;
-    wire    [4:0]     id_ex_regdest;
-    wire              id_ex_writereg;
-    wire              id_ex_writeov;
-    wire    [4:0]     id_reg_addra;
-    wire    [4:0]     id_reg_addrb;
-    wire    [31:0]    reg_id_dataa;
-    wire    [31:0]    reg_id_datab;
-    wire    [31:0]    reg_id_ass_dataa;
-    wire    [31:0]    reg_id_ass_datab;
+    // wire              ex_mem_readmem;
+    // wire              ex_mem_writemem;
+    // wire    [31:0]    ex_mem_regb;
+    // wire              ex_mem_selwsource;
+    // wire    [4:0]     ex_mem_regdest;
+    // wire              ex_mem_writereg;
+    // wire    [31:0]    ex_mem_wbvalue;
+    // wire    [4:0]     mem_wb_regdest;
+    // wire              mem_wb_writereg;
+    // wire    [31:0]    mem_wb_wbvalue;
+    // wire              id_ex_selalushift;
+    // wire              id_ex_selimregb;
+    // wire    [2:0]     id_ex_aluop;
+    // wire              id_ex_unsig;
+    // wire    [1:0]     id_ex_shiftop;
+    // wire    [4:0]     id_ex_shiftamt;
+    // wire    [31:0]    id_ex_rega;
+    // wire              id_ex_readmem;
+    // wire              id_ex_writemem;
+    // wire    [31:0]    id_ex_regb;
+    // wire    [31:0]    id_ex_imedext;
+    // wire              id_ex_selwsource;
+    // wire    [4:0]     id_ex_regdest;
+    // wire              id_ex_writereg;
+    // wire              id_ex_writeov;
+    // wire    [4:0]     id_reg_addra;
+    // wire    [4:0]     id_reg_addrb;
+    // wire    [31:0]    reg_id_dataa;
+    // wire    [31:0]    reg_id_datab;
+    // wire    [31:0]    reg_id_ass_dataa;
+    // wire    [31:0]    reg_id_ass_datab;
+
+    // Stall from the issue stage
+    wire              iss_stall;
 
     ///////////
     // Fetch //
     ///////////
-    
-    // Stall from the issue stage
-    wire              iss_stall;
 
     wire    [31:0]    if_id_nextpc;
     wire    [31:0]    if_id_instruc;
@@ -93,8 +94,38 @@ module Mips (
         .fetch_ram_load(fetch_ram_load)
     );
 
-    // tells the issue stage if instruction has 3 operands
-    wire              id_iss_regdest;
+    ////////////
+    // Decode //
+    ////////////
+
+    wire id_iss_selalushift;
+    wire id_iss_selimregb;
+    wire [2:0] id_iss_aluop;
+    wire id_iss_unsig;
+    wire [1:0] id_iss_shiftop;
+    wire id_iss_readmem;
+    wire id_iss_writemem;
+    wire [31:0] id_iss_imedext;
+    wire id_iss_selwsource;
+    wire [4:0] id_iss_regdest;
+    wire id_iss_writereg;
+    wire id_iss_writeov;
+    wire id_iss_selregdest;
+
+    wire [5:0] id_iss_op;
+    wire [5:0] id_iss_funct;
+
+    wire [4:0] id_reg_addra;
+    wire [4:0] id_reg_addrb;
+
+    wire [31:0] reg_id_ass_dataa;
+    wire [31:0] reg_id_ass_datab;
+
+    wire [31:0] id_iss_dataa;
+    wire [31:0] id_iss_datab;
+
+    wire [4:0] id_iss_addra;
+    wire [4:0] id_iss_addrb;
 
     Decode DECODE(
         .clock(clock),
@@ -108,50 +139,116 @@ module Mips (
         .id_if_pcindex(id_if_pcindex),
         .id_if_selpctype(id_if_selpctype),
 
-        .id_ex_selalushift(id_ex_selalushift),
-        .id_ex_selimregb(id_ex_selimregb),
-        .id_ex_aluop(id_ex_aluop),
-        .id_ex_unsig(id_ex_unsig),
-        .id_ex_shiftop(id_ex_shiftop),
-        .id_ex_shiftamt(id_ex_shiftamt),
-        .id_ex_rega(id_ex_rega),
-        .id_ex_readmem(id_ex_readmem),
-        .id_ex_writemem(id_ex_writemem),
-        .id_ex_regb(id_ex_regb),
-        .id_ex_imedext(id_ex_imedext),
-        .id_ex_selwsource(id_ex_selwsource),
-        .id_ex_regdest(id_ex_regdest),
-        .id_ex_writereg(id_ex_writereg),
-        .id_ex_writeov(id_ex_writeov),
+        .id_iss_selalushift(id_iss_selalushift),
+        .id_iss_selimregb(id_iss_selimregb),
+        .id_iss_aluop(id_iss_aluop),
+        .id_iss_unsig(id_iss_unsig),
+        .id_iss_shiftop(id_iss_shiftop),
+        .id_iss_readmem(id_iss_readmem),
+        .id_iss_writemem(id_iss_writemem),
+        .id_iss_imedext(id_iss_imedext),
+        .id_iss_selwsource(id_iss_selwsource),
+        .id_iss_regdest(id_iss_regdest),
+        .id_iss_writereg(id_iss_writereg),
+        .id_iss_writeov(id_iss_writeov),
+        .id_iss_selregdest(id_iss_selregdest),
+
+        .id_iss_op(id_iss_op),
+        .id_iss_funct(id_iss_funct),
+
         .iss_stall(iss_stall),
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
-        .id_iss_regdest(id_iss_regdest)
+
+        .reg_id_ass_dataa(reg_id_ass_dataa),
+        .reg_id_ass_datab(reg_id_ass_datab),
+
+        .id_iss_dataa(id_iss_dataa),
+        .id_iss_datab(id_iss_datab),
+
+        .id_iss_addra(id_iss_addra),
+        .id_iss_addrb(id_iss_addrb)
     );
 
-    
+    ///////////
+    // Issue //
+    ///////////
+
+    // Note: iss_stall has already been defined, above all modules.
+
     // Issue stage outputs
     wire iss_ex_selalushift;
     wire iss_ex_selimregb;
-    wire [2:0]  iss_ex_aluop;
+    wire [2:0] iss_ex_aluop;
     wire iss_ex_unsig;
-    wire [1:0]  iss_ex_shiftop;
-    wire [4:0]  iss_ex_shiftamt;
-    wire [31:0] iss_ex_rega;
+    wire [1:0] iss_ex_shiftop;
+    wire [4:0] iss_ex_shiftamt;
     wire iss_ex_readmem;
     wire iss_ex_writemem;
-    wire [31:0] iss_ex_regb;
     wire [31:0] iss_ex_imedext;
     wire iss_ex_selwsource;
-    wire [4:0]  iss_ex_regdest;
+    wire [4:0] iss_ex_regdest;
     wire iss_ex_writereg;
     wire iss_ex_writeov;
-    // Functional unit enablers
+    
+    wire [31:0] iss_ex_rega;
+    wire [31:0] iss_ex_regb;
+
     wire iss_am_oper;
     wire iss_mem_oper;
     wire iss_mul_oper;
     
-    // O Issue entra aqui
+    Issue ISSUE (
+        .clock(clock),
+        .reset(reset),
+
+        .id_iss_selalushift(id_iss_selalushift),
+        .id_iss_selimregb(id_iss_selimregb),
+        .id_iss_aluop(id_iss_aluop),
+        .id_iss_unsig(id_iss_unsig),
+        .id_iss_shiftop(id_iss_shiftop),
+        .id_iss_readmem(id_iss_readmem),
+        .id_iss_writemem(id_iss_writemem),
+        .id_iss_imedext(id_iss_imedext),
+        .id_iss_selwsource(id_iss_selwsource),
+        .id_iss_regdest(id_iss_regdest),
+        .id_iss_writereg(id_iss_writereg),
+        .id_iss_writeov(id_iss_writeov),
+
+        .iss_ex_selalushift(iss_ex_selalushift),
+        .iss_ex_selimregb(iss_ex_selimregb),
+        .iss_ex_aluop(iss_ex_aluop),
+        .iss_ex_unsig(iss_ex_unsig),
+        .iss_ex_shiftop(iss_ex_shiftop),
+        .iss_ex_shiftamt(iss_ex_shiftamt),
+        .iss_ex_readmem(iss_ex_readmem),
+        .iss_ex_writemem(iss_ex_writemem),
+        .iss_ex_imedext(iss_ex_imedext),
+        .iss_ex_selwsource(iss_ex_selwsource),
+        .iss_ex_regdest(iss_ex_regdest),
+        .iss_ex_writereg(iss_ex_writereg),
+        .iss_ex_writeov(iss_ex_writeov),
+
+        .id_iss_addra(id_iss_addra),
+        .id_iss_addrb(id_iss_addrb),
+
+        .id_iss_dataa(id_iss_dataa),
+        .id_iss_datab(id_iss_datab),
+
+        .iss_ex_rega(iss_ex_rega),
+        .iss_ex_regb(iss_ex_regb),
+
+        .id_iss_selregdest(id_iss_selregdest),
+
+        .id_iss_op(id_iss_op),
+        .id_iss_funct(id_iss_funct),
+
+        .iss_am_oper(iss_am_oper),
+        .iss_mem_oper(iss_mem_oper),
+        .iss_mul_oper(iss_mul_oper),
+
+        .iss_stall(iss_stall)
+    );
 
     // Alumisc outputs
     wire [4:0] a3_wb_regdest;
@@ -246,10 +343,10 @@ module Mips (
         .mul_wb_wbvalue(mul_wb_wbvalue),
 
         // AluMisc
-        .am_wb_oper(am_wb_oper),
-        .am_wb_regdest(am_wb_regdest),
-        .am_wb_writereg(am_wb_writereg),
-        .am_wb_wbvalue(am_wb_wbvalue),
+        .am_wb_oper(a3_wb_oper),
+        .am_wb_regdest(a3_wb_regdest),
+        .am_wb_writereg(a3_wb_writereg),
+        .am_wb_wbvalue(a3_wb_wbvalue),
 
         // Mem
         .mem_wb_regdest(mem_wb_regdest),

@@ -14,11 +14,8 @@ module Issue(
     input [2:0]  id_iss_aluop,
     input        id_iss_unsig,
     input [1:0]  id_iss_shiftop,
-    input [4:0]  id_iss_shiftamt,
-    input [31:0] id_iss_rega,
     input        id_iss_readmem,
     input        id_iss_writemem,
-    input [31:0] id_iss_regb,
     input [31:0] id_iss_imedext,
     input        id_iss_selwsource,
     input [4:0]  id_iss_regdest,
@@ -32,26 +29,22 @@ module Issue(
     output reg iss_ex_unsig,
     output reg [1:0] iss_ex_shiftop,
     output reg [4:0] iss_ex_shiftamt,
-    output [31:0] iss_ex_rega,
     output reg iss_ex_readmem,
     output reg iss_ex_writemem,
-    output [31:0] iss_ex_regb,
     output reg [31:0] iss_ex_imedext,
     output reg iss_ex_selwsource,
     output reg [4:0] iss_ex_regdest,
     output reg iss_ex_writereg,
     output reg iss_ex_writeov,
 
-    // These are the register addresses, we use them to access the register file
     input [4:0] id_iss_addra,
     input [4:0] id_iss_addrb,
-    // These connect to the register file
-    // Output from register file is connected to inputs above
-    output [4:0] iss_reg_addra,
-    output [4:0] iss_reg_addrb,
-    // These are register values from the register file
-    input [31:0] reg_iss_ass_dataa,
-    input [31:0] reg_iss_ass_datab,
+
+    input [31:0] id_iss_dataa,
+    input [31:0] id_iss_datab,
+
+    output reg [31:0] iss_ex_rega,
+    output reg [31:0] iss_ex_regb,
 
     // Represents number of register operands (1 => 3 registers, 0 => 2 registers)
     input id_iss_selregdest,
@@ -70,11 +63,6 @@ module Issue(
     output iss_stall
 
 );
-
-    // Register to read from file
-    assign iss_reg_addra = id_iss_addra;
-    assign iss_reg_addrb = id_iss_addrb;
-
 
     wire       a_pending;
     wire       b_pending;
@@ -142,6 +130,8 @@ module Issue(
                 iss_ex_writereg <= 1'b0;
                 iss_ex_writeov <= 1'b0;
                 functional_unit <= 2'b11;
+                iss_ex_rega <= 32'h0000_0000;
+                iss_ex_regb <= 32'h0000_0000;
             end else begin
                 iss_ex_selalushift <= id_iss_selalushift;
                 iss_ex_selimregb <= id_iss_selimregb;
@@ -155,7 +145,9 @@ module Issue(
                 iss_ex_regdest <= id_iss_regdest;
                 iss_ex_writereg <= id_iss_writereg;
                 iss_ex_writeov <= id_iss_writeov;
-                iss_ex_shiftamt <= reg_iss_ass_dataa;
+                iss_ex_shiftamt <= id_iss_dataa;
+                iss_ex_rega <= id_iss_dataa;
+                iss_ex_regb <= id_iss_datab;
                 if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
                     // Load, store
                     functional_unit <= 2'b01;
