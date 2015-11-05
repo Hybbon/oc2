@@ -27,8 +27,8 @@ module tb_scoreboard();
                  .ass_unit_a(valueunit),
                  .ass_row_a(valuerow),
                  .registerunit(func_unit),
-                 .writeaddr_a(addrpending),
-                 .enablewrite_a(enablewrite));
+                 .writeaddr(addrpending),
+                 .enablewrite(enablewrite));
 
     initial begin
         #1

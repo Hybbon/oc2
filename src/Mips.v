@@ -4,7 +4,7 @@
 `include "./src/Fetch.v"
 `include "./src/Decode.v"
 `include "./src/Execute.v"
-`include "./src/Memory.v"
+`include "./src/Mem.v"
 `include "./src/Writeback.v"
 `include "./src/Registers.v"
 

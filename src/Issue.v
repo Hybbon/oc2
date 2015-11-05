@@ -111,15 +111,15 @@ module Issue(
     Scoreboard SB (.clock(clock),
                    .reset(reset),
 
-                   .ass1_addr(id_iss_addra),
-                   .ass1_pending(a_pending),
-                   .ass1_unit(ass_unit_a),
-                   .ass1_row(ass_row_a),
+                   .ass_addr_a(id_iss_addra),
+                   .ass_pending_a(a_pending),
+                   .ass_unit_a(ass_unit_a),
+                   .ass_row_a(ass_row_a),
 
-                   .ass2_addr(id_iss_addrb),
-                   .ass2_pending(b_pending),
-                   .ass2_unit(ass_unit_b),
-                   .ass2_row(ass_row),
+                   .ass_addr_b(id_iss_addrb),
+                   .ass_pending_b(b_pending),
+                   .ass_unit_b(ass_unit_b),
+                   .ass_row_b(ass_row_b),
 
                    .writeaddr(writeaddr),
                    .registerunit(registerunit),
