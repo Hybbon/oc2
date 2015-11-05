@@ -28,19 +28,19 @@ module Writeback (
 
     assign wb_reg_en = mem_wb_oper ? mem_wb_writereg : (
         am_wb_oper ? am_wb_writereg : (
-            mul_wb_oper ? mul_wb_writereg : 1'b0;
+            mul_wb_oper ? mul_wb_writereg : 1'b0
         )
     );
 
     assign wb_reg_addr = mem_wb_oper ? mem_wb_regdest : (
         am_wb_oper ? am_wb_regdest : (
-            mul_wb_oper ? mul_wb_regdest : 5'b00000;
+            mul_wb_oper ? mul_wb_regdest : 5'b00000
         )
     );
 
     assign wb_reg_data = mem_wb_oper ? mem_wb_wbvalue : (
         am_wb_oper ? am_wb_wbvalue : (
-            mul_wb_oper ? mul_wb_wbvalue : 32'h0000_0000;
+            mul_wb_oper ? mul_wb_wbvalue : 32'h0000_0000
         )
     );
 

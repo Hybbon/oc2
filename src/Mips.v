@@ -17,7 +17,13 @@ module Mips (
     output [31:0] reg_out_data,
     // Workaround to initialize the memory modules with data/instructions
     input fetch_ram_load,
-    input mem_ram_load
+    input mem_ram_load,
+
+    output [31:0] reg_out_0,
+    output [31:0] reg_out_1,
+    output [31:0] reg_out_2,
+    output [31:0] reg_out_3,
+    output [31:0] reg_out_4
 );
 
     
@@ -257,6 +263,12 @@ module Mips (
         .wb_reg_data(wb_reg_data)
     );
 
+    wire [31:0] reg_out_0;
+    wire [31:0] reg_out_1;
+    wire [31:0] reg_out_2;
+    wire [31:0] reg_out_3;
+    wire [31:0] reg_out_4;
+
     Registers REGISTERS(
         .clock(clock),
         .reset(reset),
@@ -270,7 +282,12 @@ module Mips (
         .addrc(wb_reg_addr),
         .datac(wb_reg_data),
         .reg_out_id(reg_out_id),
-        .reg_out_data(reg_out_data)
+        .reg_out_data(reg_out_data),
+        .reg_out_0(reg_out_0),
+        .reg_out_1(reg_out_1),
+        .reg_out_2(reg_out_2),
+        .reg_out_3(reg_out_3),
+        .reg_out_4(reg_out_4)
     );
 
 endmodule
