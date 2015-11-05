@@ -66,6 +66,7 @@ module Control (
             12'b001110XXXXXX: out <= 21'b1000011XXX1010XXXXX00;
             12'b100011XXXXXX: out <= 21'b10001110XX0100XXXXX10;
             12'b101011XXXXXX: out <= 21'b100XX0X0XX0100XXXXX01;
+            12'b000000011000: out <= 21'b00010100XX0000XXXXX00;
             default:          out <= 21'b000000000000000000000;
         endcase
     end

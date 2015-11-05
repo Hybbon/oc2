@@ -22,13 +22,13 @@ module tb_scoreboard();
     // Doesn't test the second set of assynchronous i/o, for simplicity's sake
     Scoreboard s(.clock(clock),
                  .reset(reset),
-                 .ass1_addr(readaddress),
-                 .ass1_pending(valuepending),
-                 .ass1_unit(valueunit),
-                 .ass1_row(valuerow),
-                 .writeaddr(addrpending),
+                 .ass_addr_a(readaddress),
+                 .ass_pending_a(valuepending),
+                 .ass_unit_a(valueunit),
+                 .ass_row_a(valuerow),
                  .registerunit(func_unit),
-                 .enablewrite(enablewrite));
+                 .writeaddr_a(addrpending),
+                 .enablewrite_a(enablewrite));
 
     initial begin
         #1
