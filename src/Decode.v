@@ -43,6 +43,9 @@ module Decode (
     output [4:0] id_reg_addra,
     output [4:0] id_reg_addrb,
 
+    input [31:0] reg_id_dataa,
+    input [31:0] reg_id_datab,
+
     input [31:0] reg_id_ass_dataa,
     input [31:0] reg_id_ass_datab,
 
@@ -69,8 +72,8 @@ module Decode (
     wire             writeov;
     wire    [2:0]    compop;
 
-    // AAAAAAAAAAAAAAAAAAAAAA
-    // conferir outputs do banco de registradores
+    assign id_iss_dataa = reg_id_dataa;
+    assign id_iss_datab = reg_id_datab;
 
     assign id_if_rega = reg_id_ass_dataa;
     assign id_reg_addra = if_id_instruc[25:21];
@@ -116,9 +119,6 @@ module Decode (
             id_iss_op <= 6'b000000;
             id_iss_funct <= 6'b000000;
 
-            id_iss_dataa <= 32'h0000_0000;
-            id_iss_datab <= 32'h0000_0000;
-
             id_iss_addra <= 5'b00000;
             id_iss_addrb <= 5'b00000;
         end else begin
@@ -140,9 +140,6 @@ module Decode (
 
                 id_iss_op <= if_id_instruc[31:26];
                 id_iss_funct <= if_id_instruc[5:0];
-
-                id_iss_dataa <= reg_id_ass_dataa;
-                id_iss_datab <= reg_id_ass_datab;
 
                 id_iss_addra <= id_reg_addra;
                 id_iss_addrb <= id_reg_addrb;

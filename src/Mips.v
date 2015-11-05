@@ -118,6 +118,9 @@ module Mips (
     wire [4:0] id_reg_addra;
     wire [4:0] id_reg_addrb;
 
+    wire [31:0] reg_id_dataa;
+    wire [31:0] reg_id_datab;
+
     wire [31:0] reg_id_ass_dataa;
     wire [31:0] reg_id_ass_datab;
 
@@ -159,6 +162,9 @@ module Mips (
         .iss_stall(iss_stall),
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
+
+        .reg_id_dataa(reg_id_dataa),
+        .reg_id_datab(reg_id_datab),
 
         .reg_id_ass_dataa(reg_id_ass_dataa),
         .reg_id_ass_datab(reg_id_ass_datab),
