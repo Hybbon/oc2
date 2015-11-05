@@ -3,7 +3,8 @@
 
 `include "./src/Fetch.v"
 `include "./src/Decode.v"
-`include "./src/Execute.v"
+`include "./src/Mult.v"
+`include "./src/AluMisc.v"
 `include "./src/Mem.v"
 `include "./src/Writeback.v"
 `include "./src/Registers.v"
@@ -19,14 +20,7 @@ module Mips (
     input mem_ram_load
 );
 
-    wire              ex_if_stall;
-    wire    [31:0]    if_id_nextpc;
-    wire    [31:0]    if_id_instruc;
-    wire              id_if_selpcsource;
-    wire    [31:0]    id_if_rega;
-    wire    [31:0]    id_if_pcimd2ext;
-    wire    [31:0]    id_if_pcindex;
-    wire    [1:0]     id_if_selpctype;
+    
     wire              ex_mem_readmem;
     wire              ex_mem_writemem;
     wire    [31:0]    ex_mem_regb;
@@ -64,8 +58,15 @@ module Mips (
 
     // Stall from the issue stage
     wire              iss_stall;
-    // tells the issue stage if instruction has 3 operands
-    wire              id_iss_regdest;
+
+    wire              ex_if_stall;
+    wire    [31:0]    if_id_nextpc;
+    wire    [31:0]    if_id_instruc;
+    wire              id_if_selpcsource;
+    wire    [31:0]    id_if_rega;
+    wire    [31:0]    id_if_pcimd2ext;
+    wire    [31:0]    id_if_pcindex;
+    wire    [1:0]     id_if_selpctype;
 
     Fetch FETCH(
         .clock(clock),
@@ -112,6 +113,9 @@ module Mips (
         .id_reg_addrb(id_reg_addrb),
         .id_iss_regdest(id_iss_regdest)
     );
+
+    // tells the issue stage if instruction has 3 operands
+    wire              id_iss_regdest;
 
     Execute EXECUTE(
         .clock(clock),
