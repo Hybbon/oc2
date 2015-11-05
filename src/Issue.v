@@ -25,13 +25,16 @@ module Issue(
     input        id_iss_writereg,
     input        id_iss_writeov,
 
-    // These are register values from the register file
-    input [31:0] reg_id_ass_dataa,
-    input [31:0] reg_id_ass_datab,
-
     // These are the register addresses, we use them to access the register file
-    input [4:0]  id_reg_addra,
-    input [4:0]  id_reg_addrb,
+    input [4:0]  id_iss_addra,
+    input [4:0]  id_iss_addrb,
+    // These connect to the register file
+    // Output from register file is connected to inputs above
+    output [4:0] iss_reg_addra,
+    output [4:0] iss_reg_addrb,
+    // These are register values from the register file
+    input [31:0] reg_iss_ass_dataa,
+    input [31:0] reg_iss_ass_datab,
 
     // Represents number of register operands (1 => 3 registers, 0 => 2 registers)
     input        id_iss_selregdest,
@@ -43,26 +46,22 @@ module Issue(
     input [5:0] id_iss_funct, 
 
     // Repeated to execution stage
-    output        iss_ex_selalushift,
-    output        iss_ex_selimregb,
-    output [2:0]  iss_ex_aluop,
-    output        iss_ex_unsig,
-    output [1:0]  iss_ex_shiftop,
-    output [4:0]  iss_ex_shiftamt,
-    output [31:0] iss_ex_rega,
-    output        iss_ex_readmem,
-    output        iss_ex_writemem,
-    output [31:0] iss_ex_regb,
-    output [31:0] iss_ex_imedext,
-    output        iss_ex_selwsource,
-    output [4:0]  iss_ex_regdest,
-    output        iss_ex_writereg,
-    output        iss_ex_writeov,
+    output reg        iss_ex_selalushift,
+    output reg        iss_ex_selimregb,
+    output reg [2:0]  iss_ex_aluop,
+    output reg        iss_ex_unsig,
+    output reg [1:0]  iss_ex_shiftop,
+    output     [4:0]  iss_ex_shiftamt,
+    output     [31:0] iss_ex_rega,
+    output reg        iss_ex_readmem,
+    output reg        iss_ex_writemem,
+    output     [31:0] iss_ex_regb,
+    output reg [31:0] iss_ex_imedext,
+    output reg        iss_ex_selwsource,
+    output reg [4:0]  iss_ex_regdest,
+    output reg        iss_ex_writereg,
+    output reg        iss_ex_writeov,
 
-    // These connect to the register file
-    // Output from register file is connected to inputs above
-    output [31:0] iss_reg_addra,
-    output [31:0] iss_reg_addrb,
 
     // Functional unit to be used
     output reg iss_am_oper,
@@ -79,24 +78,21 @@ module Issue(
     assign iss_ex_aluop = id_iss_aluop;
     assign iss_ex_unsig = id_iss_unsig;
     assign iss_ex_shiftop = id_iss_shiftop;
-    assign iss_ex_shiftamt = id_iss_shiftamt;
-    assign iss_ex_rega = id_iss_rega;
     assign iss_ex_readmem = id_iss_readmem;
     assign iss_ex_writemem = id_iss_writemem;
-    assign iss_ex_regb = id_iss_regb;
     assign iss_ex_imedext = id_iss_imedext;
     assign iss_ex_selwsource = id_iss_selwsource;
     assign iss_ex_regdest = id_iss_regdest;
     assign iss_ex_writereg = id_iss_writereg;
     assign iss_ex_writeov = id_iss_writeov;
-    assign iss_reg_addra = id_reg_addra;
-    assign iss_reg_addrb = id_reg_addrb;
-    assign reg_iss_dataa = reg_id_dataa;
-    assign reg_iss_datab = reg_id_datab;
+    assign iss_ex_rega = reg_iss_ass_dataa;
+    assign iss_ex_regb = reg_iss_ass_datab;
+    assign iss_ex_shiftamt = reg_iss_ass_dataa;
 
     // Register to read from file
-    assign iss_reg_addra = id_reg_addra;
-    assign iss_reg_addrb = id_reg_addrb;
+    assign iss_reg_addra = id_iss_addra;
+    assign iss_reg_addrb = id_iss_addrb;
+
 
     wire       a_pending;
     wire       b_pending;
@@ -115,12 +111,12 @@ module Issue(
     Scoreboard SB (.clock(clock),
                    .reset(reset),
 
-                   .ass1_addr(id_reg_addra),
+                   .ass1_addr(id_iss_addra),
                    .ass1_pending(a_pending),
                    .ass1_unit(ass_unit_a),
                    .ass1_row(ass_row_a),
 
-                   .ass2_addr(id_reg_addrb),
+                   .ass2_addr(id_iss_addrb),
                    .ass2_pending(b_pending),
                    .ass2_unit(ass_unit_b),
                    .ass2_row(ass_row),
