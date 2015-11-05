@@ -12,7 +12,7 @@ reg [31:0] sum;
 
 assign out = sum[divider];
 
-always @(posedge in or negedge in or negedge reset) begin
+always @(posedge in or negedge reset) begin
     if (~reset) begin
         sum = 32'h0000_0000;
     end else begin
