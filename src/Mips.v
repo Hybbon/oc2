@@ -366,12 +366,6 @@ module Mips (
         .wb_reg_data(wb_reg_data)
     );
 
-    wire [31:0] reg_out_0;
-    wire [31:0] reg_out_1;
-    wire [31:0] reg_out_2;
-    wire [31:0] reg_out_3;
-    wire [31:0] reg_out_4;
-
     Registers REGISTERS(
         .clock(clock),
         .reset(reset),

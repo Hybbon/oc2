@@ -46,7 +46,7 @@ module Mem (
     output mem_wb_oper
 );
 
-    assign mem_wb_oper = m1_mem_wbvalue;
+    assign mem_wb_oper = mem_wb_wbvalue;
 
     wire [31:0] m0_m1_data_addr;
     wire [31:0] m0_m1_regb;
