@@ -1,7 +1,8 @@
 `ifndef MEMORY_V
 `define MEMORY_V
 
-`include "./src/Ram32.v"
+`include "./src/Mem_0.v"
+`include "./src/Mem_1.v"
 
 module Memory (
     input                   clock,
@@ -24,38 +25,37 @@ module Memory (
 
 
     wire [6:0] data_addr;
-    wire [31:0] data_data_out; // lol
-    wire data_wre;
+    wire [6:0] addr_mem_0;
+    wire wre_mem_0;
 
     assign data_addr = ex_mem_wbvalue[8:2];
-    assign data_wre = (!ex_mem_readmem & ex_mem_writemem);
 
-    Ram data_ram (
+    Mem_0 data_ram_0 (
         .clock(clock),
         .reset(reset),
         .addr(data_addr),
-        .data_in(ex_mem_regb),
-        .data_out(data_data_out),
-        .wre(data_wre),
-        .instr_load(1'b0),
-        .data_load(mem_ram_load)
+        .ex_mem_readmem(ex_mem_readmem),
+        .ex_mem_writemem(ex_mem_writemem),
+        .addr_out(addr_mem_0),
+        .wre_out(wre_mem_0)
     );
 
-    always @(posedge clock or negedge reset) begin
-        if (~reset) begin
-            mem_wb_regdest <= 5'b00000;
-            mem_wb_writereg <= 1'b0;
-            mem_wb_wbvalue <= 32'h0000_0000;
-        end else begin
-            mem_wb_regdest <= ex_mem_regdest;
-            mem_wb_writereg <= ex_mem_writereg;
-            if (ex_mem_selwsource==1'b1) begin
-                mem_wb_wbvalue <= data_data_out;
-            end else begin
-                mem_wb_wbvalue <= ex_mem_wbvalue;
-            end
-        end
-    end
+    Mem_1 data_ram_1 (
+        .clock(clock),
+        .reset(reset),
+        .addr(addr_mem_0),
+        .data_in(ex_mem_regb),
+        .wre(wre_mem_0),
+        .instr_load(1'b0),
+        .data_load(mem_ram_load),
+        .mem_wb_regdest(mem_wb_regdest),
+        .mem_wb_writereg(mem_wb_writereg),
+        .mem_wb_wbvalue(mem_wb_wbvalue)
+        .ex_mem_regdest(ex_mem_regdest),
+        .ex_mem_writereg(ex_mem_writereg),
+        .ex_mem_selwsource(ex_mem_selwsource),
+        .ex_mem_wbvalue(ex_mem_wbvalue)
+    );
 
 endmodule
 
