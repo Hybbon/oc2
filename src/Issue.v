@@ -101,32 +101,25 @@ module Issue(
 
     wire [1:0] registerunit;
 
-    wire [4:0] writeaddr_a;
-    wire       enablewrite_a;
-    
-    wire [4:0] writeaddr_b;
-    wire       enablewrite_b;
+    wire [4:0] writeaddr;
+    wire       enablewrite;
 
     Scoreboard SB (.clock(clock),
                    .reset(reset),
 
-                   .ass_addr_a(id_reg_addra),
-                   .ass_pending_a(a_pending),
-                   .ass_unit_a(ass_unit_a),
-                   .ass_row_a(ass_row_a),
+                   .ass1_addr(id_reg_addra),
+                   .ass1_pending(a_pending),
+                   .ass1_unit(ass_unit_a),
+                   .ass1_row(ass_row_a),
 
-                   .ass_addr_b(id_reg_addrb),
-                   .ass_pending_b(b_pending),
-                   .ass_unit_b(ass_unit_b),
-                   .ass_row_b(ass_row_b),
+                   .ass2_addr(id_reg_addrb),
+                   .ass2_pending(b_pending),
+                   .ass2_unit(ass_unit_b),
+                   .ass2_row(ass_row),
 
+                   .writeaddr(writeaddr),
                    .registerunit(registerunit),
-
-                   .writeaddr_a(writeaddr_a),
-                   .enablewrite_a(enablewrite_a),
-                   
-                   .writeaddr_b(writeaddr_b),
-                   .enablewrite_b(enablewrite_b)
+                   .enablewrite(enablewrite)
         );
 
     HazardDetector HDETECTOR(.ass_pending_a(a_pending),
