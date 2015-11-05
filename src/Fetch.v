@@ -7,7 +7,7 @@ module Fetch (
     input                   clock,
     input                   reset,
     //Issue
-    input                   is_stall,
+    input                   iss_stall,
     //Execute
     input                   ex_if_stall,
     //Decode
@@ -49,7 +49,7 @@ module Fetch (
                 if_id_instruc <= 32'h0000_0000;
                 if_id_nextpc <= pc;
             end else begin
-                if (is_stall) begin
+                if (iss_stall) begin
                     // issue stall should keep current instruction
                     if_id_nextpc <= pc;
                 end else begin

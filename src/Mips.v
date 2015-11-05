@@ -63,14 +63,14 @@ module Mips (
     wire    [31:0]    wb_reg_data;
 
     // Stall from the issue stage
-    wire              is_stall;
+    wire              iss_stall;
     // tells the issue stage if instruction has 3 operands
-    wire              id_is_regdest;
+    wire              id_iss_regdest;
 
     Fetch FETCH(
         .clock(clock),
         .reset(reset),
-        .is_stall(is_stall),
+        .iss_stall(iss_stall),
         .ex_if_stall(ex_if_stall),
         .if_id_nextpc(if_id_nextpc),
         .if_id_instruc(if_id_instruc),
@@ -107,10 +107,10 @@ module Mips (
         .id_ex_regdest(id_ex_regdest),
         .id_ex_writereg(id_ex_writereg),
         .id_ex_writeov(id_ex_writeov),
-        .is_stall(is_stall),
+        .iss_stall(iss_stall),
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
-        .id_is_regdest(id_is_regdest)
+        .id_iss_regdest(id_iss_regdest)
     );
 
     Execute EXECUTE(

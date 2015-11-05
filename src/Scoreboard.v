@@ -21,7 +21,7 @@ module Scoreboard(
     input      [1:0] registerunit,    // which functional unit it is going to
     // 1st register
     input      [4:0] writeaddr_a,     // register to become pending
-    input            enablewrite_a    // prevent incorrect write (e.g. during stalls)
+    input            enablewrite_a,    // prevent incorrect write (e.g. during stalls)
     // 2nd register
     input      [4:0] writeaddr_b,     // register to become pending
     input            enablewrite_b    // prevent incorrect write (e.g. during stalls)
