@@ -159,7 +159,7 @@ module Issue(
                     functional_unit <= 2'b00;
                 end
             end else begin
-                functional_unit <= 2'bZZ;
+                functional_unit <= 2'b11;
             end
         end
     end
