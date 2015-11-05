@@ -1,18 +1,19 @@
-`ifndef MEMORY_V
-`define MEMORY_V
+`ifndef MEM_V
+`define MEM_V
 
 `include "./src/Mem_0.v"
 `include "./src/Mem_1.v"
 
 module Memory (
-    input                   clock,
-    input                   reset,
+    input clock,
+    input reset,
 
+    // Operation signal
     input iss_mem_oper,
 
     // Read or write?
-    input                   iss_mem_readmem,
-    input                   iss_mem_writemem,
+    input iss_mem_readmem,
+    input iss_mem_writemem,
 
     // LOAD $regb, IMM($rega)
     // STORE $regb, IMM($rega)
@@ -22,22 +23,22 @@ module Memory (
     input [31:0] iss_mem_imedext,
 
     // Value to be written
-    input         [31:0]    iss_mem_regb,
+    input [31:0] iss_mem_regb,
 
     // Determines whether to write back data from Memory or Execute
     // (unnecessary)
     // input                   iss_mem_selwsource,
 
     // Forwarded to Writeback
-    input         [4:0]     iss_mem_regdest,
-    input                   iss_mem_writereg,
+    input [4:0] iss_mem_regdest,
+    input iss_mem_writereg,
     // Data to be saved: yet to be determined. There's no reason to have that
     // as an input anymore (you could get it from Execute before)
     // input         [31:0]    iss_mem_wbvalue,
 
-    output reg    [4:0]     mem_wb_regdest,
-    output reg              mem_wb_writereg,
-    output reg    [31:0]    mem_wb_wbvalue,
+    output [4:0] mem_wb_regdest,
+    output mem_wb_writereg,
+    output [31:0] mem_wb_wbvalue,
 
     // Used for ram initialization - asynch, global
     input mem_ram_load,
