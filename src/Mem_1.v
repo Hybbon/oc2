@@ -1,6 +1,8 @@
 `ifndef MEM_ONE
 `define MEM_ONE
 
+`include "./src/Ram32.v"
+
 module Mem_1 (
     input clock,
     input reset,
