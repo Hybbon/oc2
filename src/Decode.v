@@ -33,11 +33,16 @@ module Decode (
     output reg              id_ex_writeov,
     output reg              id_iss_selregdest, // 1 if current instruction has 3 operands
 
+    // Both may be used at Issue to determine which functional unit should be
+    // used
+    output reg [5:0] id_iss_op,
+    output reg [5:0] id_iss_funct,
+
     // Keeps the current instruction
-    input                   iss_stall;
+    input                   iss_stall,
     //Registers
     output        [4:0]     id_reg_addra,
-    output        [4:0]     id_reg_addrb,
+    output        [4:0]     id_reg_addrb
     // Register incoming data removed
     // is now at issue stage
 );
@@ -101,6 +106,9 @@ module Decode (
             id_ex_writeov <= 1'b0;
             id_ex_imedext <= 32'h0000_0000;
             id_iss_selregdest <= 1'b0;
+
+            id_iss_op <= 6'b000000;
+            id_iss_funct <= 6'b000000;
         end else begin
             // Fix stalls caused by issue stage
             if (~iss_stall) begin
@@ -117,6 +125,9 @@ module Decode (
                 id_ex_writeov <= writeov;
                 id_ex_imedext <= $signed(if_id_instruc[15:0]);
                 id_iss_selregdest <= selregdest;
+
+                id_iss_op <= if_id_instruc[31:26];
+                id_iss_funct <= if_id_instruc[5:0];
             end
         end
     end

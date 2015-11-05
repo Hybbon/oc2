@@ -36,6 +36,12 @@ module Issue(
     // Represents number of register operands (1 => 3 registers, 0 => 2 registers)
     input        id_iss_selregdest,
 
+    // Opcode and funct, received from Decode in order to find out which func-
+    // tional unit should be enabled
+   
+    input [5:0] id_iss_op,
+    input [5:0] id_iss_funct, 
+
     // Repeated to execution stage
     output        iss_ex_selalushift,
     output        iss_ex_selimregb,
@@ -58,8 +64,10 @@ module Issue(
     output [31:0] iss_reg_addra,
     output [31:0] iss_reg_addrb,
 
-    // Functional unit to send instruction
-    output reg [1:0] iss_ex_func_unit,
+    // Functional unit to be used
+    output reg iss_am_oper,
+    output reg iss_mem_oper,
+    output reg iss_mul_oper,
 
     // Issue-related stall
     output       iss_stall
@@ -130,12 +138,28 @@ module Issue(
                              .stalled(iss_stall)
     );
 
+    // 2'b00: AluMisc
+    // 2'b01: Mem
+    // 2'b10: Mult
+    reg [1:0] functional_unit;
+
+    assign iss_am_oper = functional_unit === 2'b00;
+    assign iss_mem_oper = functional_unit === 2'b01;
+    assign iss_mul_oper = functional_unit === 2'b10;
+
     always @(posedge clock or negedge reset) begin
         if (reset) begin
             if(~iss_stall) begin
-                // TODO send to corresponding functional unit
+                if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
+                    // Load, store
+                    functional_unit <= 2'b01;
+                end else if (id_iss_op === 6'b000000 && id_iss_funct === 6'b011000) begin
+                    functional_unit <= 2'b10;
+                end else begin
+                    functional_unit <= 2'b00;
+                end
             end else begin
-                iss_ex_func_unit <= 2'bZZ;
+                functional_unit <= 2'bZZ;
             end
         end
     end
