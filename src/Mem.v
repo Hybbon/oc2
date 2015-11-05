@@ -4,7 +4,7 @@
 `include "./src/Mem_0.v"
 `include "./src/Mem_1.v"
 
-module Memory (
+module Mem (
     input clock,
     input reset,
 
