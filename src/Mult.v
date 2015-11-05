@@ -47,6 +47,7 @@ Mult_0 MULT_0(
     .mul_m0_regb(iss_mul_regb),
     .mul_m0_regdest(iss_mul_regdest),
 
+    .m0_m1_oper(m0_m1_oper),
     .m0_m1_rega(m0_m1_rega),
     .m0_m1_regb(m0_m1_regb),
     .m0_m1_regdest(m0_m1_regdest),
