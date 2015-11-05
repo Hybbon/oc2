@@ -7,6 +7,7 @@
 module Decode (
     input                   clock,
     input                   reset,
+
     //Fetch
     input         [31:0]    if_id_instruc,
     input         [31:0]    if_id_nextpc,
@@ -15,19 +16,20 @@ module Decode (
     output        [31:0]    id_if_pcimd2ext,
     output        [31:0]    id_if_pcindex,
     output        [1:0]     id_if_selpctype,
-    //Execute
-    output reg              id_ex_selalushift,
-    output reg              id_ex_selimregb,
-    output reg    [2:0]     id_ex_aluop,
-    output reg              id_ex_unsig,
-    output reg    [1:0]     id_ex_shiftop,
-    output reg              id_ex_readmem,
-    output reg              id_ex_writemem,
-    output reg    [31:0]    id_ex_imedext,
-    output reg              id_ex_selwsource,
+    
+    // Issue
+    output reg              id_iss_selalushift,
+    output reg              id_iss_selimregb,
+    output reg    [2:0]     id_iss_aluop,
+    output reg              id_iss_unsig,
+    output reg    [1:0]     id_iss_shiftop,
+    output reg              id_iss_readmem,
+    output reg              id_iss_writemem,
+    output reg    [31:0]    id_iss_imedext,
+    output reg              id_iss_selwsource,
     output reg    [4:0]     id_iss_regdest,  // destination register
-    output reg              id_ex_writereg, 
-    output reg              id_ex_writeov,
+    output reg              id_iss_writereg, 
+    output reg              id_iss_writeov,
     output reg              id_iss_selregdest, // 1 if current instruction has 3 operands
 
     // Both may be used at Issue to determine which functional unit should be
@@ -87,18 +89,18 @@ module Decode (
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
-            id_ex_selalushift <= 1'b0;
-            id_ex_selimregb <= 1'b0;
-            id_ex_aluop <= 3'b000;
-            id_ex_unsig <= 1'b0;
-            id_ex_unsig <= 2'b00;
-            id_ex_readmem <= 1'b0;
-            id_ex_writemem <= 1'b0;
-            id_ex_selwsource <= 1'b0;
-            id_ex_regdest <= 5'b00000;
-            id_ex_writereg <= 1'b0;
-            id_ex_writeov <= 1'b0;
-            id_ex_imedext <= 32'h0000_0000;
+            id_iss_selalushift <= 1'b0;
+            id_iss_selimregb <= 1'b0;
+            id_iss_aluop <= 3'b000;
+            id_iss_unsig <= 1'b0;
+            id_iss_unsig <= 2'b00;
+            id_iss_readmem <= 1'b0;
+            id_iss_writemem <= 1'b0;
+            id_iss_selwsource <= 1'b0;
+            id_iss_regdest <= 5'b00000;
+            id_iss_writereg <= 1'b0;
+            id_iss_writeov <= 1'b0;
+            id_iss_imedext <= 32'h0000_0000;
             id_iss_selregdest <= 1'b0;
 
             id_iss_op <= 6'b000000;
@@ -106,18 +108,18 @@ module Decode (
         end else begin
             // Fix stalls caused by issue stage
             if (~iss_stall) begin
-                id_ex_selalushift <= selalushift;
-                id_ex_selimregb <= selimregb;
-                id_ex_aluop <= aluop;
-                id_ex_unsig <= unsig;
-                id_ex_shiftop <= shiftop;
-                id_ex_readmem <= readmem;
-                id_ex_writemem <= writemem;
-                id_ex_selwsource <= selwsource;
-                id_ex_regdest <= (selregdest) ? if_id_instruc[15:11] : if_id_instruc[20:16];
-                id_ex_writereg <= writereg;
-                id_ex_writeov <= writeov;
-                id_ex_imedext <= $signed(if_id_instruc[15:0]);
+                id_iss_selalushift <= selalushift;
+                id_iss_selimregb <= selimregb;
+                id_iss_aluop <= aluop;
+                id_iss_unsig <= unsig;
+                id_iss_shiftop <= shiftop;
+                id_iss_readmem <= readmem;
+                id_iss_writemem <= writemem;
+                id_iss_selwsource <= selwsource;
+                id_iss_regdest <= (selregdest) ? if_id_instruc[15:11] : if_id_instruc[20:16];
+                id_iss_writereg <= writereg;
+                id_iss_writeov <= writeov;
+                id_iss_imedext <= $signed(if_id_instruc[15:0]);
                 id_iss_selregdest <= selregdest;
 
                 id_iss_op <= if_id_instruc[31:26];
