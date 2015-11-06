@@ -106,7 +106,7 @@ module Decode (
             id_iss_selimregb <= 1'b0;
             id_iss_aluop <= 3'b000;
             id_iss_unsig <= 1'b0;
-            id_iss_unsig <= 2'b00;
+            id_iss_shiftop <= 2'b00;
             id_iss_readmem <= 1'b0;
             id_iss_writemem <= 1'b0;
             id_iss_selwsource <= 1'b0;

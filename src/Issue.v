@@ -114,48 +114,46 @@ module Issue(
     assign iss_mul_oper = functional_unit === 2'b10;
 
     always @(posedge clock or negedge reset) begin
-        if (~iss_stall) begin
-            if (~reset) begin
-                iss_ex_selalushift <= 1'b0;
-                iss_ex_selimregb <= 1'b0;
-                iss_ex_aluop <= 3'b000;
-                iss_ex_unsig <= 1'b0;
-                iss_ex_shiftop <= 2'b00;
-                iss_ex_shiftamt <= 5'b00000;
-                iss_ex_readmem <= 1'b0;
-                iss_ex_writemem <= 1'b0;
-                iss_ex_imedext <= 32'h0000_0000;
-                iss_ex_selwsource <= 1'b0;
-                iss_ex_regdest <= 5'b00000;
-                iss_ex_writereg <= 1'b0;
-                iss_ex_writeov <= 1'b0;
-                functional_unit <= 2'b11;
-                iss_ex_rega <= 32'h0000_0000;
-                iss_ex_regb <= 32'h0000_0000;
+        if (~reset) begin
+            iss_ex_selalushift <= 1'b0;
+            iss_ex_selimregb <= 1'b0;
+            iss_ex_aluop <= 3'b000;
+            iss_ex_unsig <= 1'b0;
+            iss_ex_shiftop <= 2'b00;
+            iss_ex_shiftamt <= 5'b00000;
+            iss_ex_readmem <= 1'b0;
+            iss_ex_writemem <= 1'b0;
+            iss_ex_imedext <= 32'h0000_0000;
+            iss_ex_selwsource <= 1'b0;
+            iss_ex_regdest <= 5'b00000;
+            iss_ex_writereg <= 1'b0;
+            iss_ex_writeov <= 1'b0;
+            functional_unit <= 2'b11;
+            iss_ex_rega <= 32'h0000_0000;
+            iss_ex_regb <= 32'h0000_0000;
+        end else if (~iss_stall) begin
+            iss_ex_selalushift <= id_iss_selalushift;
+            iss_ex_selimregb <= id_iss_selimregb;
+            iss_ex_aluop <= id_iss_aluop;
+            iss_ex_unsig <= id_iss_unsig;
+            iss_ex_shiftop <= id_iss_shiftop;
+            iss_ex_readmem <= id_iss_readmem;
+            iss_ex_writemem <= id_iss_writemem;
+            iss_ex_imedext <= id_iss_imedext;
+            iss_ex_selwsource <= id_iss_selwsource;
+            iss_ex_regdest <= id_iss_regdest;
+            iss_ex_writereg <= id_iss_writereg;
+            iss_ex_writeov <= id_iss_writeov;
+            iss_ex_shiftamt <= id_iss_dataa;
+            iss_ex_rega <= id_iss_dataa;
+            iss_ex_regb <= id_iss_datab;
+            if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
+                // Load, store
+                functional_unit <= 2'b01;
+            end else if (id_iss_op === 6'b000000 && id_iss_funct === 6'b011000) begin
+                functional_unit <= 2'b10;
             end else begin
-                iss_ex_selalushift <= id_iss_selalushift;
-                iss_ex_selimregb <= id_iss_selimregb;
-                iss_ex_aluop <= id_iss_aluop;
-                iss_ex_unsig <= id_iss_unsig;
-                iss_ex_shiftop <= id_iss_shiftop;
-                iss_ex_readmem <= id_iss_readmem;
-                iss_ex_writemem <= id_iss_writemem;
-                iss_ex_imedext <= id_iss_imedext;
-                iss_ex_selwsource <= id_iss_selwsource;
-                iss_ex_regdest <= id_iss_regdest;
-                iss_ex_writereg <= id_iss_writereg;
-                iss_ex_writeov <= id_iss_writeov;
-                iss_ex_shiftamt <= id_iss_dataa;
-                iss_ex_rega <= id_iss_dataa;
-                iss_ex_regb <= id_iss_datab;
-                if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
-                    // Load, store
-                    functional_unit <= 2'b01;
-                end else if (id_iss_op === 6'b000000 && id_iss_funct === 6'b011000) begin
-                    functional_unit <= 2'b10;
-                end else begin
-                    functional_unit <= 2'b00;
-                end
+                functional_unit <= 2'b00;
             end
         end else begin
             functional_unit <= 2'b11;

@@ -25,7 +25,11 @@ assign upper_bits = m2_m3_multres[63:31];
 assign lower_bits = m2_m3_multres[31:0];
 
 always @(posedge clock or negedge reset) begin
-    if (~reset || ~m2_m3_oper || upper_bits != 33'h00000_0000) begin
+    if (~reset) begin
+        m3_mul_regdest <= 5'b00000;
+        m3_mul_writereg <= 1'b0;
+        m3_mul_wbvalue <= 32'h0000_0000;
+    end else if (~m2_m3_oper || upper_bits != 33'h00000_0000) begin
         m3_mul_regdest <= 5'b00000;
         m3_mul_writereg <= 1'b0;
         m3_mul_wbvalue <= 32'h0000_0000;

@@ -104,7 +104,12 @@ module AluMisc (
 
     always @(posedge clock or negedge reset) begin
         // AluMisc_0
-        if (~reset || ~iss_a0_oper) begin
+        if (~reset) begin
+            a0_a1_oper <= 1'b0;  
+            a0_a1_regdest <= 5'b00000;
+            a0_a1_writereg <= 1'b0;
+            a0_a1_wbvalue <= 32'h0000_0000;
+        end else if (~iss_a0_oper) begin
             a0_a1_oper <= 1'b0;  
             a0_a1_regdest <= 5'b00000;
             a0_a1_writereg <= 1'b0;
@@ -117,7 +122,12 @@ module AluMisc (
         end
 
         // AluMisc_1
-        if (~reset || ~a0_a1_oper) begin
+        if (~reset) begin
+            a1_a2_oper <= 1'b0;  
+            a1_a2_regdest <= 5'b00000;
+            a1_a2_writereg <= 1'b0;
+            a1_a2_wbvalue <= 32'h0000_0000;
+        end else if (~a0_a1_oper) begin
             a1_a2_oper <= 1'b0;  
             a1_a2_regdest <= 5'b00000;
             a1_a2_writereg <= 1'b0;
@@ -130,7 +140,12 @@ module AluMisc (
         end
 
         // AluMisc_2
-        if (~reset || ~a1_a2_oper) begin
+        if (~reset) begin
+            a2_a3_oper <= 1'b0;  
+            a2_a3_regdest <= 5'b00000;
+            a2_a3_writereg <= 1'b0;
+            a2_a3_wbvalue <= 32'h0000_0000;
+        end else if (~a1_a2_oper) begin
             a2_a3_oper <= 1'b0;  
             a2_a3_regdest <= 5'b00000;
             a2_a3_writereg <= 1'b0;
@@ -143,7 +158,12 @@ module AluMisc (
         end
 
         // AluMisc_3
-        if (~reset || ~a2_a3_oper) begin
+        if (~reset) begin
+            a3_wb_oper <= 1'b0;
+            a3_wb_regdest <= 5'b00000;
+            a3_wb_writereg <= 1'b0;
+            a3_wb_wbvalue <= 32'h0000_0000;
+        end else if (~a2_a3_oper) begin
             a3_wb_oper <= 1'b0;
             a3_wb_regdest <= 5'b00000;
             a3_wb_writereg <= 1'b0;

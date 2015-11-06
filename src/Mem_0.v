@@ -24,7 +24,15 @@ module Mem_0 (
 );
 
     always @(posedge clock or negedge reset) begin
-        if (~reset || ~mem_m0_oper) begin
+        if (~reset) begin
+            m0_m1_oper <= 1'b0;
+            m0_m1_readmem <= 1'b0;
+            m0_m1_writemem <= 1'b0;
+            m0_m1_data_addr <= 32'h0000_0000;
+            m0_m1_regb <= 32'h0000_0000;
+            m0_m1_regdest <= 5'b00000;
+            m0_m1_writereg <= 1'b0;
+        end else if (~mem_m0_oper) begin
             m0_m1_oper <= 1'b0;
             m0_m1_readmem <= 1'b0;
             m0_m1_writemem <= 1'b0;

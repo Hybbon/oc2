@@ -24,7 +24,13 @@ module Mult_2 (
 );
 
 always @(posedge clock or negedge reset) begin
-    if (~reset || ~m1_m2_oper) begin
+    if (~reset) begin
+        m2_m3_oper <= 1'b0;
+        m2_m3_multres <= 64'h00000000_00000000;
+        m2_m3_regdest <= 5'b00000;
+        m2_m3_ispositive <= 1'b0;
+        m2_m3_iszero <= 1'b0;
+    end else if (~m1_m2_oper) begin
         m2_m3_oper <= 1'b0;
         m2_m3_multres <= 64'h00000000_00000000;
         m2_m3_regdest <= 5'b00000;
