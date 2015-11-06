@@ -13,7 +13,7 @@ module Registers_TB0;
     reg  [4:0]  addrb;
     wire [31:0] datab;
     wire [31:0] ass_datab;
-    reg        enc;
+    reg         enc;
     reg  [4:0]  addrc;
     reg  [31:0] datac;
 

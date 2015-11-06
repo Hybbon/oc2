@@ -298,7 +298,7 @@ module Mips (
         .clock(clock),
         .reset(reset),
 
-        .iss_mem_oper(iss_ex_oper),
+        .iss_mem_oper(iss_mem_oper),
         .iss_mem_readmem(iss_ex_readmem),
         .iss_mem_writemem(iss_ex_writemem),
         .iss_mem_rega(iss_ex_rega),
@@ -326,7 +326,7 @@ module Mips (
         .clock(clock),
         .reset(reset),
 
-        .iss_mul_oper(iss_ex_oper),
+        .iss_mul_oper(iss_mul_oper),
         .iss_mul_rega(iss_ex_rega),
         .iss_mul_regb(iss_ex_regb),
         .iss_mul_regdest(iss_ex_regdest),
