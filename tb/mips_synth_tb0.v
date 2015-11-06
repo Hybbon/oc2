@@ -32,11 +32,11 @@ module Mips_TB;
             mips.REGISTERS.registers[17],
             mips.REGISTERS.registers[18],
             mips.REGISTERS.registers[19],
-            mips.MEMORY.data_ram.memory[3],
-            mips.MEMORY.data_ram.memory[4]
+            mips.MEM.MEM_1.data_ram.memory[3],
+            mips.MEM.MEM_1.data_ram.memory[4]
         );
 
-        #2000 $writememh("mips_synth_tb0_data_out.hex", mips.MEMORY.data_ram.memory);
+        #2000 $writememh("mips_synth_tb0_data_out.hex", mips.MEM.MEM_1.data_ram.memory);
         #3000 $finish;
     end
 

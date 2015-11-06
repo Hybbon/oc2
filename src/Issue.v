@@ -40,8 +40,11 @@ module Issue(
     input [4:0] id_iss_addra,
     input [4:0] id_iss_addrb,
 
-    input [31:0] id_iss_dataa,
-    input [31:0] id_iss_datab,
+    input [31:0] reg_iss_dataa,
+    input [31:0] reg_iss_datab,
+
+    output [4:0] iss_reg_addra,
+    output [4:0] iss_reg_addrb,
 
     output reg [31:0] iss_ex_rega,
     output reg [31:0] iss_ex_regb,
@@ -113,6 +116,9 @@ module Issue(
     assign iss_mem_oper = functional_unit === 2'b01;
     assign iss_mul_oper = functional_unit === 2'b10;
 
+    assign iss_reg_addra = id_iss_addra;
+    assign iss_reg_addrb = id_iss_addrb;
+
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
             iss_ex_selalushift <= 1'b0;
@@ -144,9 +150,9 @@ module Issue(
             iss_ex_regdest <= id_iss_regdest;
             iss_ex_writereg <= id_iss_writereg;
             iss_ex_writeov <= id_iss_writeov;
-            iss_ex_shiftamt <= id_iss_dataa;
-            iss_ex_rega <= id_iss_dataa;
-            iss_ex_regb <= id_iss_datab;
+            iss_ex_shiftamt <= reg_iss_dataa;
+            iss_ex_rega <= reg_iss_dataa;
+            iss_ex_regb <= reg_iss_datab;
             if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
                 // Load, store
                 functional_unit <= 2'b01;

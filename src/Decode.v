@@ -49,9 +49,6 @@ module Decode (
     input [31:0] reg_id_ass_dataa,
     input [31:0] reg_id_ass_datab,
 
-    output [31:0] id_iss_dataa,
-    output [31:0] id_iss_datab,
-
     output reg [4:0] id_iss_addra,
     output reg [4:0] id_iss_addrb
 );

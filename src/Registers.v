@@ -16,6 +16,12 @@ module Registers (
 	input [4:0] reg_out_id,
     output [31:0] reg_out_data,
 
+    // registers for issue stage
+    input         [4:0]     addr_iss_a,
+    output        [31:0]    ass_data_iss_a,
+    input         [4:0]     addr_iss_b,
+    output        [31:0]    ass_data_iss_b,
+
     output [31:0] reg_out_0,
     output [31:0] reg_out_1,
     output [31:0] reg_out_2,
@@ -34,6 +40,9 @@ module Registers (
 	assign reg_out_data = registers[reg_out_id];
     assign ass_dataa = registers[addra];
     assign ass_datab = registers[addrb];
+
+    assign ass_data_iss_a = registers[addr_iss_a];
+    assign ass_data_iss_b = registers[addr_iss_b];
 
     reg [5:0] i;
     generate
