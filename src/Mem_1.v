@@ -50,7 +50,7 @@ module Mem_1 (
         end else begin
             m1_mem_regdest <= m0_m1_regdest;
             m1_mem_writereg <= m0_m1_writereg;
-            m1_mem_wbvalue = m0_m1_oper;
+            m1_mem_wbvalue <= data_data_out;
         end
     end
    
