@@ -1,8 +1,8 @@
-\documentclass[10pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage{placeins}
 \usepackage[utf8]{inputenc}
 \usepackage[ruled]{algorithm2e}
-\usepackage{fullpage}
+%\usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[portuguese]{babel}
@@ -40,5 +40,41 @@ Organização de Computadores 2 - 2º Semestre de 2015
 \section{Introdução}
 
 O segundo trabalho prático do semestre envolve a transformação do processador MIPS com \emph{pipeline} implementado no trabalho anterior em um processador superescalar \textbf{I4}. Esse breve relatório pretende discutir os novos módulos implementados e as mudanças realizadas, entrando em detalhes sobre o funcionamento do processador e sobre as dificuldades encontradas no desenvolvimento.
+
+\section{Mudanças realizadas}
+
+A transformação do MIPS \emph{pipeline} no I4 consiste em, basicamente:
+
+\begin{itemize}
+    \item Dividir o estágio de execução em suas unidades funcionais
+    \item Criar o novo estágio de \emph{Issue}, que encaminha as instruções para as unidades funcionais corretas.
+    \item Implementar uma \emph{Scoreboard}, utilizada para manter controle sobre quais registradores estão sendo escritos e prevenir \emph{hazards} no processador.
+    \item Implementar a unidade de detecção de hazard em si, também utilizada dentro do \emph{Issue}.
+\end{itemize}
+
+As mudanças acima implicam, também, em diversas outras mudanças no funcionamento interno do processador para garantir que a incorporação das novidades ocorra como esperado.
+
+Além disso, foi modificado o módulo externo que lida com a interação entre o processador e as entradas e saídas da \emph{FPGA}, para o momento da síntese do circuito na placa e teste prático.
+
+\subsection{Scoreboard}
+
+O scoreboard foi implementado e funciona como esperado, com duas interfaces assíncronas de leitura (para interação com o detector de hazard) e uma interface síncrona de escrita. Para testar seu funcionamento, o testbench \verb|scoreboard_tb0.v| foi feito, e sua execução gera resultados corretos.
+
+\subsection{Divisão do estágio de execução}
+
+A divisão do estágio de execução foi, como proposto pela especificação, feita dividindo o módulo em três partes: multiplicação, operações em memória e outras operações (principalmente as operações lógico-aritméticas). Para isso, foram implementados os módulos \verb|Mult.v|, \verb|Mem.v| e \verb|AluMisc.v|, respectivamente.
+
+\subsubsection{Mult.v}
+
+Essa unidade funcional lida com a operação nova de multiplicação, dividida, também, em quatro estágios, como proposto na especificação: \emph{Mult\_0.v}, \emph{Mult\_1.v}, \emph{Mult\_2.v} e \emph{Mult\_3.v}. Para testá-la, foi feito o testbench \verb|mult_tb0.v|, que gera o resultado esperado.
+
+\subsubsection{Mem.v}
+
+Por sua vez, a unidade funcional \emph{Mem.v} trata as instruções de leitura e escrita na memória, dividida em dois estágios reais (\emph{Mem\_0.v} e \emph{Mem\_1.v}) e dois estágios de encaminhamento para o ciclo seguinte, para garantir a execução em ordem.
+
+\subsubsection{AluMisc.v}
+
+Finalmente, \emph{AluMisc.v} lida com as operações da ALU, do \emph{shifter} e outras operações miscelâneas. Apenas um dos seus sub-estágios é realmente funcional, e, portanto, todo o código foi mantido dentro de apenas um arquivo, com os outros três estágios ``falsos'' dentro dele, também. O testbench \verb|alumisc_tb0.v| testa brevemente sua funcionalidade e opera dentro do esperado para com sua saída.
+
 
 \end{document}
