@@ -60,6 +60,10 @@ Além disso, foi modificado o módulo externo que lida com a interação entre o
 
 O scoreboard foi implementado e funciona como esperado, com duas interfaces assíncronas de leitura (para interação com o detector de hazard) e uma interface síncrona de escrita. Para testar seu funcionamento, o testbench \verb|scoreboard_tb0.v| foi feito, e sua execução gera resultados corretos.
 
+\subsection{Detector de Hazard}
+
+O detector de hazard é um módulo assíncrono que recebe sinais do scoreboard e determina se deve ocorrer um stall no processador, caso a instrução nova provoque um hazard de dados. Sua funcionalidade é testada no testbench \verb|hazarddetector_tb0.v|, que opera apropriadamente.
+
 \subsection{Divisão do estágio de execução}
 
 A divisão do estágio de execução foi, como proposto pela especificação, feita dividindo o módulo em três partes: multiplicação, operações em memória e outras operações (principalmente as operações lógico-aritméticas). Para isso, foram implementados os módulos \verb|Mult.v|, \verb|Mem.v| e \verb|AluMisc.v|, respectivamente.
@@ -76,5 +80,20 @@ Por sua vez, a unidade funcional \emph{Mem.v} trata as instruções de leitura e
 
 Finalmente, \emph{AluMisc.v} lida com as operações da ALU, do \emph{shifter} e outras operações miscelâneas. Apenas um dos seus sub-estágios é realmente funcional, e, portanto, todo o código foi mantido dentro de apenas um arquivo, com os outros três estágios ``falsos'' dentro dele, também. O testbench \verb|alumisc_tb0.v| testa brevemente sua funcionalidade e opera dentro do esperado para com sua saída.
 
+\subsection{Issue}
+
+O novo estágio de \emph{Issue} recebe como entrada os sinais obtidos no \emph{Decode} e instancia internamente o detector de \emph{hazards} e o scoreboard. Ele é responsável por determinar qual unidade funcional corresponde a qual instrução e por repassar os sinais apropriados para cada unidade. Além disso, ele deve reagir apropriadamente aos sinais do detector de hazard, enviando o sinal de stall para os estágios anteriores, e também deve escrever no scoreboard quando a instrução atual realiza uma escrita de registrador.
+
+\subsection{Outras mudanças}
+
+Como comentado previamente, foi necessário alterar diversos sinais nos módulos antigos do processador para garantir o bom funcionamento das novidades. Em particular, o módulo de \emph{Decode} e \emph{Writeback} tiveram seus sinais de entrada e saída modificados, para enviar para o novo \emph{Issue} e receber dados das unidades funcionais. No que cabe ao \emph{Writeback}, foi necessário também permitir que ele recebesse de apenas uma das três unidades funcionais a cada ciclo, de forma mutuamente exclusiva.
+
+\section{Problemas que persistem}
+
+O processador ainda não funciona como um todo. Há problemas na interação entre o \emph{Decode}, o \emph{Issue} e o banco de registradores. No momento, há suspeitas de que isso ocorra devido à interação entre interfaces síncronas e assíncronas, mas não foi possível encontrar o bug ainda. Por esse motivo, não foi possível garantir ainda, também, o funcionamento correto do \emph{Issue} e do \emph{Decode}. Também por esse motivo não há certeza quanto à correção das modificações feitas no \verb|mips_synth.v|, que lida com a síntese na FPGA.
+
+\section{Conclusão}
+
+Nesse relatório, foram detalhadas as mudanças realizadas no processador MIPS para transformá-lo num processador superescalar em ordem. O trabalho não foi concluído ainda com êxito, mas os problemas citados na seção anterior estão sendo resolvidos no momento, e a versão funcional será enviada assim que estiver pronta. Pedimos desculpas pelo atraso no envio dessa versão incompleta, assim como pelas dificuldades encontradas durante o processo de desenvolvimento e teste.
 
 \end{document}
