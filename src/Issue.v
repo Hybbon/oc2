@@ -37,15 +37,20 @@ module Issue (
     output reg iss_ex_writereg,
     output reg iss_ex_writeov,
 
+    // Register interaction: register addressed and data are received from
+    // decode. There is no direct interaction between the register file and
+    // the issue stage. This is done in order to avoid trouble with stalls and
+    // also to keep synchronicity manageable (within reason)
+
+    // Addresses (necessary for the scoreboard, received synchronally)
     input [4:0] id_iss_addra,
     input [4:0] id_iss_addrb,
 
-    input [31:0] reg_iss_dataa,
-    input [31:0] reg_iss_datab,
-
-    output [4:0] iss_reg_addra,
-    output [4:0] iss_reg_addrb,
-
+    // Data values (forwarded to the functional units)
+    // Received asynchronally, but written synchronally to the output regis-
+    // ters.
+    input [31:0] id_iss_dataa,
+    input [31:0] id_iss_datab,
     output reg [31:0] iss_ex_rega,
     output reg [31:0] iss_ex_regb,
 
@@ -81,30 +86,32 @@ module Issue (
     wire [4:0] writeaddr;
     wire       enablewrite;
 
-    Scoreboard SB (.clock(clock),
-                   .reset(reset),
+    Scoreboard SB (
+        .clock(clock),
+        .reset(reset),
 
-                   .ass_addr_a(id_iss_addra),
-                   .ass_pending_a(a_pending),
-                   .ass_unit_a(ass_unit_a),
-                   .ass_row_a(ass_row_a),
+        .ass_addr_a(id_iss_addra),
+        .ass_pending_a(a_pending),
+        .ass_unit_a(ass_unit_a),
+        .ass_row_a(ass_row_a),
 
-                   .ass_addr_b(id_iss_addrb),
-                   .ass_pending_b(b_pending),
-                   .ass_unit_b(ass_unit_b),
-                   .ass_row_b(ass_row_b),
+        .ass_addr_b(id_iss_addrb),
+        .ass_pending_b(b_pending),
+        .ass_unit_b(ass_unit_b),
+        .ass_row_b(ass_row_b),
 
-                   .writeaddr(writeaddr),
-                   .registerunit(registerunit),
-                   .enablewrite(enablewrite)
-        );
+        .writeaddr(writeaddr),
+        .registerunit(registerunit),
+        .enablewrite(enablewrite)
+    );
 
-    HazardDetector HDETECTOR(.ass_pending_a(a_pending),
-                             .ass_row_a(ass_row_a),
-                             .ass_pending_b(b_pending),
-                             .ass_row_b(ass_row_b),
-                             .selregdest(id_iss_selregdest),
-                             .stalled(iss_stall)
+    HazardDetector HDETECTOR (
+        .ass_pending_a(a_pending),
+        .ass_row_a(ass_row_a),
+        .ass_pending_b(b_pending),
+        .ass_row_b(ass_row_b),
+        .selregdest(id_iss_selregdest),
+        .stalled(iss_stall)
     );
 
     // 2'b00: AluMisc
@@ -115,9 +122,6 @@ module Issue (
     assign iss_am_oper = functional_unit === 2'b00;
     assign iss_mem_oper = functional_unit === 2'b01;
     assign iss_mul_oper = functional_unit === 2'b10;
-
-    assign iss_reg_addra = id_iss_addra;
-    assign iss_reg_addrb = id_iss_addrb;
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
@@ -150,9 +154,9 @@ module Issue (
             iss_ex_regdest <= id_iss_regdest;
             iss_ex_writereg <= id_iss_writereg;
             iss_ex_writeov <= id_iss_writeov;
-            iss_ex_shiftamt <= reg_iss_dataa;
-            iss_ex_rega <= reg_iss_dataa;
-            iss_ex_regb <= reg_iss_datab;
+            iss_ex_shiftamt <= id_iss_dataa;
+            iss_ex_rega <= id_iss_dataa;
+            iss_ex_regb <= id_iss_datab;
             if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
                 // Load, store
                 functional_unit <= 2'b01;

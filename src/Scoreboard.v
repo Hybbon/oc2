@@ -1,7 +1,7 @@
 `ifndef SCOREBOARD_V
 `define SCOREBOARD_V
 
-module Scoreboard(
+module Scoreboard (
     input            clock,
     input            reset,
 
