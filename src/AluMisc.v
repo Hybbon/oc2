@@ -79,13 +79,14 @@ module AluMisc (
     wire    [31:0]    result;
     wire    [31:0]    mux_imregb;
 
+    // wire to which the second operand (register or immediate) is assigned
     assign mux_imregb = (iss_a0_selimregb) ? iss_a0_imedext : iss_a0_regb;
 
     Alu ALU(.a(iss_a0_rega),.b(mux_imregb),.aluout(aluout),.op(iss_a0_aluop),.unsig(iss_a0_unsig),.overflow(aluov));
     Shifter SHIFTER(.in(iss_a0_regb),.shiftop(iss_a0_shiftop),.shiftamt(iss_a0_shiftamt),.result(result));
-    
+
     // Buffers - AM -> A0, A1, A2, A3 -> actual output
-    
+
     reg a0_a1_oper;
     reg [4:0] a0_a1_regdest;
     reg a0_a1_writereg;

@@ -4,7 +4,7 @@
 `include "./src/Scoreboard.v"
 `include "./src/HazardDetector.v"
 
-module Issue(
+module Issue (
     input        clock,
     input        reset,
 
@@ -55,7 +55,7 @@ module Issue(
     // Opcode and funct, received from Decode in order to find out which func-
     // tional unit should be enabled
     input [5:0] id_iss_op,
-    input [5:0] id_iss_funct, 
+    input [5:0] id_iss_funct,
 
     // Functional unit to be used
     output iss_am_oper,
