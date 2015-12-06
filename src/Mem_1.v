@@ -18,7 +18,7 @@ module Mem_1 (
 
     output reg [4:0] m1_mem_regdest,
     output reg m1_mem_writereg,
-    output [31:0] m1_mem_wbvalue
+    output reg [31:0] m1_mem_wbvalue
 );
     
     wire [6:0] data_addr;
@@ -28,10 +28,6 @@ module Mem_1 (
     assign data_wre = !m0_m1_readmem & m0_m1_writemem;
 
     wire [31:0] data_data_out;
-    // Asynchronous workaround for getting the value out at the right cycle
-    // Not actually necessary, but might turn out to be useful if other stuff
-    // goes wrong.
-    assign m1_mem_wbvalue = m0_m1_oper ? data_data_out : 32'h0000_0000;
 
     Ram data_ram (
         .clock(clock),
@@ -54,6 +50,7 @@ module Mem_1 (
         end else begin
             m1_mem_regdest <= m0_m1_regdest;
             m1_mem_writereg <= m0_m1_writereg;
+            m1_mem_wbvalue <= data_data_out;
         end
     end
    

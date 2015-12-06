@@ -124,11 +124,11 @@ module Mips (
     wire [31:0] reg_id_ass_dataa;
     wire [31:0] reg_id_ass_datab;
 
-    wire [31:0] id_iss_dataa;
-    wire [31:0] id_iss_datab;
-
     wire [4:0] id_iss_addra;
     wire [4:0] id_iss_addrb;
+
+    wire [31:0] id_iss_dataa;
+    wire [31:0] id_iss_datab;
 
     Decode DECODE(
         .clock(clock),
@@ -163,17 +163,14 @@ module Mips (
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
 
-        .reg_id_dataa(reg_id_dataa),
-        .reg_id_datab(reg_id_datab),
-
         .reg_id_ass_dataa(reg_id_ass_dataa),
         .reg_id_ass_datab(reg_id_ass_datab),
 
-        .id_iss_dataa(id_iss_dataa),
-        .id_iss_datab(id_iss_datab),
-
         .id_iss_addra(id_iss_addra),
-        .id_iss_addrb(id_iss_addrb)
+        .id_iss_addrb(id_iss_addrb),
+
+        .id_iss_dataa(id_iss_dataa),
+        .id_iss_datab(id_iss_datab)
     );
 
     ///////////
@@ -203,6 +200,11 @@ module Mips (
     wire iss_am_oper;
     wire iss_mem_oper;
     wire iss_mul_oper;
+
+    wire [4:0]  iss_reg_addra;
+    wire [4:0]  iss_reg_addrb;
+    wire [31:0] reg_iss_dataa;
+    wire [31:0] reg_iss_datab;
     
     Issue ISSUE (
         .clock(clock),
@@ -296,7 +298,7 @@ module Mips (
         .clock(clock),
         .reset(reset),
 
-        .iss_mem_oper(iss_ex_oper),
+        .iss_mem_oper(iss_mem_oper),
         .iss_mem_readmem(iss_ex_readmem),
         .iss_mem_writemem(iss_ex_writemem),
         .iss_mem_rega(iss_ex_rega),
@@ -324,7 +326,7 @@ module Mips (
         .clock(clock),
         .reset(reset),
 
-        .iss_mul_oper(iss_ex_oper),
+        .iss_mul_oper(iss_mul_oper),
         .iss_mul_rega(iss_ex_rega),
         .iss_mul_regb(iss_ex_regb),
         .iss_mul_regdest(iss_ex_regdest),

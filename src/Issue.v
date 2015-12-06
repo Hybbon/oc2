@@ -4,7 +4,7 @@
 `include "./src/Scoreboard.v"
 `include "./src/HazardDetector.v"
 
-module Issue(
+module Issue (
     input        clock,
     input        reset,
 
@@ -37,12 +37,20 @@ module Issue(
     output reg iss_ex_writereg,
     output reg iss_ex_writeov,
 
+    // Register interaction: register addressed and data are received from
+    // decode. There is no direct interaction between the register file and
+    // the issue stage. This is done in order to avoid trouble with stalls and
+    // also to keep synchronicity manageable (within reason)
+
+    // Addresses (necessary for the scoreboard, received synchronally)
     input [4:0] id_iss_addra,
     input [4:0] id_iss_addrb,
 
+    // Data values (forwarded to the functional units)
+    // Received asynchronally, but written synchronally to the output regis-
+    // ters.
     input [31:0] id_iss_dataa,
     input [31:0] id_iss_datab,
-
     output reg [31:0] iss_ex_rega,
     output reg [31:0] iss_ex_regb,
 
@@ -52,7 +60,7 @@ module Issue(
     // Opcode and funct, received from Decode in order to find out which func-
     // tional unit should be enabled
     input [5:0] id_iss_op,
-    input [5:0] id_iss_funct, 
+    input [5:0] id_iss_funct,
 
     // Functional unit to be used
     output iss_am_oper,
@@ -78,30 +86,32 @@ module Issue(
     wire [4:0] writeaddr;
     wire       enablewrite;
 
-    Scoreboard SB (.clock(clock),
-                   .reset(reset),
+    Scoreboard SB (
+        .clock(clock),
+        .reset(reset),
 
-                   .ass_addr_a(id_iss_addra),
-                   .ass_pending_a(a_pending),
-                   .ass_unit_a(ass_unit_a),
-                   .ass_row_a(ass_row_a),
+        .ass_addr_a(id_iss_addra),
+        .ass_pending_a(a_pending),
+        .ass_unit_a(ass_unit_a),
+        .ass_row_a(ass_row_a),
 
-                   .ass_addr_b(id_iss_addrb),
-                   .ass_pending_b(b_pending),
-                   .ass_unit_b(ass_unit_b),
-                   .ass_row_b(ass_row_b),
+        .ass_addr_b(id_iss_addrb),
+        .ass_pending_b(b_pending),
+        .ass_unit_b(ass_unit_b),
+        .ass_row_b(ass_row_b),
 
-                   .writeaddr(writeaddr),
-                   .registerunit(registerunit),
-                   .enablewrite(enablewrite)
-        );
+        .writeaddr(writeaddr),
+        .registerunit(registerunit),
+        .enablewrite(enablewrite)
+    );
 
-    HazardDetector HDETECTOR(.ass_pending_a(a_pending),
-                             .ass_row_a(ass_row_a),
-                             .ass_pending_b(b_pending),
-                             .ass_row_b(ass_row_b),
-                             .selregdest(id_iss_selregdest),
-                             .stalled(iss_stall)
+    HazardDetector HDETECTOR (
+        .ass_pending_a(a_pending),
+        .ass_row_a(ass_row_a),
+        .ass_pending_b(b_pending),
+        .ass_row_b(ass_row_b),
+        .selregdest(id_iss_selregdest),
+        .stalled(iss_stall)
     );
 
     // 2'b00: AluMisc

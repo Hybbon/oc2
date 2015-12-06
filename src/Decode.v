@@ -16,7 +16,7 @@ module Decode (
     output        [31:0]    id_if_pcimd2ext,
     output        [31:0]    id_if_pcindex,
     output        [1:0]     id_if_selpctype,
-    
+
     // Issue
     output reg              id_iss_selalushift,
     output reg              id_iss_selimregb,
@@ -28,7 +28,7 @@ module Decode (
     output reg    [31:0]    id_iss_imedext,
     output reg              id_iss_selwsource,
     output reg    [4:0]     id_iss_regdest,  // destination register
-    output reg              id_iss_writereg, 
+    output reg              id_iss_writereg,
     output reg              id_iss_writeov,
     output reg              id_iss_selregdest, // 1 if current instruction has 3 operands
 
@@ -39,21 +39,23 @@ module Decode (
 
     // Keeps the current instruction
     input iss_stall,
-    //Registers
+
+    // Register interface
+    // The decode module is responsible for actually interacting with the ARF.
+    // Addresses are obtained asynchronally via Control. They're, then, for-
+    // warded to the asynchronous interfaces of the ARF. The ARF sends back,
+    // both synchronally and asynchronally.
     output [4:0] id_reg_addra,
     output [4:0] id_reg_addrb,
-
-    input [31:0] reg_id_dataa,
-    input [31:0] reg_id_datab,
 
     input [31:0] reg_id_ass_dataa,
     input [31:0] reg_id_ass_datab,
 
-    output [31:0] id_iss_dataa,
-    output [31:0] id_iss_datab,
-
     output reg [4:0] id_iss_addra,
-    output reg [4:0] id_iss_addrb
+    output reg [4:0] id_iss_addrb,
+
+    output reg [31:0] id_iss_dataa,
+    output reg [31:0] id_iss_datab
 );
 
     wire    [1:0]    selbrjumpz;
@@ -71,9 +73,6 @@ module Decode (
     wire             writereg;
     wire             writeov;
     wire    [2:0]    compop;
-
-    assign id_iss_dataa = reg_id_dataa;
-    assign id_iss_datab = reg_id_datab;
 
     assign id_if_rega = reg_id_ass_dataa;
     assign id_reg_addra = if_id_instruc[25:21];
@@ -121,6 +120,9 @@ module Decode (
 
             id_iss_addra <= 5'b00000;
             id_iss_addrb <= 5'b00000;
+
+            id_iss_dataa <= 32'h0000_0000;
+            id_iss_datab <= 32'h0000_0000;
         end else begin
             // Fix stalls caused by issue stage
             if (~iss_stall) begin
@@ -143,6 +145,9 @@ module Decode (
 
                 id_iss_addra <= id_reg_addra;
                 id_iss_addrb <= id_reg_addrb;
+
+                id_iss_dataa <= reg_id_ass_dataa;
+                id_iss_dataa <= reg_id_ass_datab;
             end
         end
     end
