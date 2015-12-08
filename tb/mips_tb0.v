@@ -25,7 +25,7 @@ module Mips_TB;
     );
 
     initial begin
-        #10 $readmemh("../tb/mips_tb0_arith_basic.hex", mips.FETCH.instr_ram.memory);
+        #10 $readmemh("../tb/mips_tb0_arith_basic_extranops.hex", mips.FETCH.instr_ram.memory);
 
         $dumpfile("mips_tb0.vcd");
         $dumpvars;

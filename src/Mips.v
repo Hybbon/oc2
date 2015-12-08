@@ -336,7 +336,7 @@ module Mips (
         .mul_wb_wbvalue(mul_wb_wbvalue),
 
         .mul_wb_oper(mul_wb_oper)
-    );    
+    );
 
     // Writeback outputs
     wire wb_reg_en;
@@ -344,6 +344,8 @@ module Mips (
     wire [31:0] wb_reg_data;
 
     Writeback WRITEBACK(
+        .clock(clock),
+        .reset(reset),
         // Mult
         .mul_wb_oper(mul_wb_oper),
         .mul_wb_regdest(mul_wb_regdest),
