@@ -127,9 +127,6 @@ module Mips (
     wire [4:0] id_iss_addra;
     wire [4:0] id_iss_addrb;
 
-    wire [31:0] id_iss_dataa;
-    wire [31:0] id_iss_datab;
-
     Decode DECODE(
         .clock(clock),
         .reset(reset),
@@ -167,10 +164,7 @@ module Mips (
         .reg_id_ass_datab(reg_id_ass_datab),
 
         .id_iss_addra(id_iss_addra),
-        .id_iss_addrb(id_iss_addrb),
-
-        .id_iss_dataa(id_iss_dataa),
-        .id_iss_datab(id_iss_datab)
+        .id_iss_addrb(id_iss_addrb)
     );
 
     ///////////
@@ -240,11 +234,14 @@ module Mips (
         .id_iss_addra(id_iss_addra),
         .id_iss_addrb(id_iss_addrb),
 
-        .id_iss_dataa(id_iss_dataa),
-        .id_iss_datab(id_iss_datab),
+        .reg_iss_dataa(reg_iss_dataa),
+        .reg_iss_datab(reg_iss_datab),
 
         .iss_ex_rega(iss_ex_rega),
         .iss_ex_regb(iss_ex_regb),
+
+        .iss_reg_addra(iss_reg_addra),
+        .iss_reg_addrb(iss_reg_addrb),
 
         .id_iss_selregdest(id_iss_selregdest),
 
@@ -388,7 +385,13 @@ module Mips (
         .reg_out_1(reg_out_1),
         .reg_out_2(reg_out_2),
         .reg_out_3(reg_out_3),
-        .reg_out_4(reg_out_4)
+        .reg_out_4(reg_out_4),
+
+        // issue stage ports
+        .addr_iss_a(iss_reg_addra),
+        .ass_data_iss_a(reg_iss_dataa),
+        .addr_iss_b(iss_reg_addrb),
+        .ass_data_iss_b(reg_iss_datab)
     );
 
 endmodule

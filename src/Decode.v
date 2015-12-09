@@ -41,7 +41,6 @@ module Decode (
     input iss_stall,
 
     // Register interface
-    // The decode module is responsible for actually interacting with the ARF.
     // Addresses are obtained asynchronally via Control. They're, then, for-
     // warded to the asynchronous interfaces of the ARF. The ARF sends back,
     // both synchronally and asynchronally.
@@ -52,10 +51,7 @@ module Decode (
     input [31:0] reg_id_ass_datab,
 
     output reg [4:0] id_iss_addra,
-    output reg [4:0] id_iss_addrb,
-
-    output reg [31:0] id_iss_dataa,
-    output reg [31:0] id_iss_datab
+    output reg [4:0] id_iss_addrb
 );
 
     wire    [1:0]    selbrjumpz;
@@ -121,8 +117,6 @@ module Decode (
             id_iss_addra <= 5'b00000;
             id_iss_addrb <= 5'b00000;
 
-            id_iss_dataa <= 32'h0000_0000;
-            id_iss_datab <= 32'h0000_0000;
         end else begin
             // Fix stalls caused by issue stage
             if (~iss_stall) begin
@@ -145,9 +139,6 @@ module Decode (
 
                 id_iss_addra <= id_reg_addra;
                 id_iss_addrb <= id_reg_addrb;
-
-                id_iss_dataa <= reg_id_ass_dataa;
-                id_iss_dataa <= reg_id_ass_datab;
             end
         end
     end
