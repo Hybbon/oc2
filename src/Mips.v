@@ -187,7 +187,7 @@ module Mips (
     wire [4:0] iss_ex_regdest;
     wire iss_ex_writereg;
     wire iss_ex_writeov;
-    
+
     wire [31:0] iss_ex_rega;
     wire [31:0] iss_ex_regb;
 
@@ -199,7 +199,7 @@ module Mips (
     wire [4:0]  iss_reg_addrb;
     wire [31:0] reg_iss_dataa;
     wire [31:0] reg_iss_datab;
-    
+
     Issue ISSUE (
         .clock(clock),
         .reset(reset),
@@ -234,14 +234,14 @@ module Mips (
         .id_iss_addra(id_iss_addra),
         .id_iss_addrb(id_iss_addrb),
 
+        .iss_reg_addra(iss_reg_addra),
+        .iss_reg_addrb(iss_reg_addrb),
+
         .reg_iss_dataa(reg_iss_dataa),
         .reg_iss_datab(reg_iss_datab),
 
         .iss_ex_rega(iss_ex_rega),
         .iss_ex_regb(iss_ex_regb),
-
-        .iss_reg_addra(iss_reg_addra),
-        .iss_reg_addrb(iss_reg_addrb),
 
         .id_iss_selregdest(id_iss_selregdest),
 
