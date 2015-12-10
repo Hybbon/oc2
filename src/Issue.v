@@ -58,7 +58,8 @@ module Issue (
     output reg [31:0] iss_ex_rega,
     output reg [31:0] iss_ex_regb,
 
-    // Represents number of register operands (1 => 3 registers, 0 => 2 registers)
+    // Represents number of register operands (1 => 3 registers,
+    // 0 => 2 registers)
     input id_iss_selregdest,
 
     // Opcode and funct, received from Decode in order to find out which func-
@@ -71,12 +72,21 @@ module Issue (
     output iss_mem_oper,
     output iss_mul_oper,
 
-    // Issue-related stall
-    output iss_stall
+    // Asynchronous interface between Decode, the scoreboard and the hazard
+    // detector.
+    input [4:0] id_hd_ass_addra,
+    input id_hd_check_a,
+    input [4:0] id_hd_ass_addrb,
+    input id_hd_check_b,
+
+    // Branch-related decode and fetch stall
+    output hd_id_stall
 
 );
 
-    // asynchronous scoreboard outputs
+    wire iss_stall;
+
+    // asynchronous issue stage scoreboard outputs
     wire iss_ass_pending_a;
     wire [1:0] iss_ass_unit_a;
     wire [4:0] iss_ass_row_a;
@@ -84,6 +94,15 @@ module Issue (
     wire iss_ass_pending_b;
     wire [1:0] iss_ass_unit_b;
     wire [4:0] iss_ass_row_b;
+
+    // asynchronous issue stage scoreboard outputs
+    wire id_ass_pending_a;
+    wire [1:0] id_ass_unit_a; // Not actually used
+    wire [4:0] id_ass_row_a;
+
+    wire id_ass_pending_b;
+    wire [1:0] id_ass_unit_b; // Not actually used
+    wire [4:0] id_ass_row_b;
 
     // synchronous scoreboard inputs
     wire [1:0] registerunit;
@@ -105,6 +124,16 @@ module Issue (
         .iss_ass_unit_b(iss_ass_unit_b),
         .iss_ass_row_b(iss_ass_row_b),
 
+        .id_ass_addr_a(id_hd_ass_addra),
+        .id_ass_pending_a(id_ass_pending_a),
+        .id_ass_unit_a(id_ass_unit_a),
+        .id_ass_row_a(id_ass_row_a),
+
+        .id_ass_addr_b(id_hd_ass_addrb),
+        .id_ass_pending_b(id_ass_pending_b),
+        .id_ass_unit_b(id_ass_unit_b),
+        .id_ass_row_b(id_ass_row_b),
+
         .writeaddr(writeaddr),
         .registerunit(registerunit),
         .enablewrite(enablewrite)
@@ -117,7 +146,15 @@ module Issue (
         .iss_ass_pending_b(iss_ass_pending_b),
         .iss_ass_row_b(iss_ass_row_b),
         .iss_check_b(id_iss_selregdest),
-        .iss_stalled(iss_stall)
+        .iss_stalled(iss_stall),
+
+        .id_ass_pending_a(id_ass_pending_a),
+        .id_ass_row_a(id_ass_row_a),
+        .id_check_a(id_hd_check_a),
+        .id_ass_pending_b(id_ass_pending_b),
+        .id_ass_row_b(id_ass_row_b),
+        .id_check_b(id_hd_check_b),
+        .id_stalled(id_stall)
     );
 
     // 2'b00: AluMisc

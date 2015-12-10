@@ -38,7 +38,7 @@ module Decode (
     output reg [5:0] id_iss_funct,
 
     // Keeps the current instruction
-    input iss_stall,
+    input id_stall,
 
     // Register interface
     // Addresses are obtained asynchronally via Control. They're, then, for-
@@ -51,7 +51,13 @@ module Decode (
     input [31:0] reg_id_ass_datab,
 
     output reg [4:0] id_iss_addra,
-    output reg [4:0] id_iss_addrb
+    output reg [4:0] id_iss_addrb,
+
+    // [Async] Hazard detector and scoreboard interface
+    output [4:0] id_hd_ass_addra,
+    output id_hd_check_a,
+    output [4:0] id_hd_ass_addrb,
+    output id_hd_check_b
 );
 
     wire    [1:0]    selbrjumpz;
@@ -76,6 +82,16 @@ module Decode (
     assign id_if_selpctype = selpctype;
     assign id_if_pcindex = {if_id_nextpc[31:28],if_id_instruc[25:0]<<2'b10};
     assign id_if_pcimd2ext = if_id_nextpc + $signed({{16{if_id_instruc[15]}},if_id_instruc[15:0]}<<2'b10);
+
+    assign id_hd_ass_addra = id_reg_addra;
+    assign id_hd_ass_addrb = id_reg_addrb;
+
+    assign id_hd_check_a = selbrjumpz === 2'b10 || selbrjumpz === 2'b01 &&
+        selpctype !== 2'b01;
+
+    assign id_hd_check_b = selbrjumpz === 2'b10 && (
+        compop === 2'b00 || compop === 2'b01
+    );
 
     Comparator COMPARATOR(.a(reg_id_ass_dataa),.b(reg_id_ass_datab),.op(compop),.compout(compout));
     Control CONTROL(.op(if_id_instruc[31:26]),.fn(if_id_instruc[5:0]),
@@ -119,7 +135,7 @@ module Decode (
 
         end else begin
             // Fix stalls caused by issue stage
-            if (~iss_stall) begin
+            if (~id_stall) begin
                 id_iss_selalushift <= selalushift;
                 id_iss_selimregb <= selimregb;
                 id_iss_aluop <= aluop;

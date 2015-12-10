@@ -60,8 +60,8 @@ module Mips (
     // wire    [31:0]    reg_id_ass_dataa;
     // wire    [31:0]    reg_id_ass_datab;
 
-    // Stall from the issue stage
-    wire              iss_stall;
+    // Stall from the issue stage to Decode and Fetch
+    wire              id_stall;
 
     ///////////
     // Fetch //
@@ -80,7 +80,7 @@ module Mips (
         .clock(clock),
         .reset(reset),
 
-        .iss_stall(iss_stall),
+        .id_stall(id_stall),
 
         .if_id_nextpc(if_id_nextpc),
         .if_id_instruc(if_id_instruc),
@@ -127,6 +127,11 @@ module Mips (
     wire [4:0] id_iss_addra;
     wire [4:0] id_iss_addrb;
 
+    wire [4:0] id_hd_ass_addra;
+    wire id_hd_check_a;
+    wire [4:0] id_hd_ass_addrb;
+    wire id_hd_check_b;
+
     Decode DECODE(
         .clock(clock),
         .reset(reset),
@@ -156,7 +161,7 @@ module Mips (
         .id_iss_op(id_iss_op),
         .id_iss_funct(id_iss_funct),
 
-        .iss_stall(iss_stall),
+        .id_stall(id_stall),
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
 
@@ -164,7 +169,12 @@ module Mips (
         .reg_id_ass_datab(reg_id_ass_datab),
 
         .id_iss_addra(id_iss_addra),
-        .id_iss_addrb(id_iss_addrb)
+        .id_iss_addrb(id_iss_addrb),
+
+        .id_hd_ass_addra(id_hd_ass_addra),
+        .id_hd_check_a(id_hd_check_a),
+        .id_hd_ass_addrb(id_hd_ass_addrb),
+        .id_hd_check_b(id_hd_check_b)
     );
 
     ///////////
@@ -252,7 +262,12 @@ module Mips (
         .iss_mem_oper(iss_mem_oper),
         .iss_mul_oper(iss_mul_oper),
 
-        .iss_stall(iss_stall)
+        .id_hd_ass_addra(id_hd_ass_addra),
+        .id_hd_check_a(id_hd_check_a),
+        .id_hd_ass_addrb(id_hd_ass_addrb),
+        .id_hd_check_b(id_hd_check_b),
+
+        .hd_id_stall(id_stall)
     );
 
     // Alumisc outputs
