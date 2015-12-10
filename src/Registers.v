@@ -14,7 +14,7 @@ module Registers (
     input         [4:0]     addrc,
     input         [31:0]    datac,
 	input [4:0] reg_out_id,
-    output [31:0] reg_out_data,   
+    output [31:0] reg_out_data,
 
     // registers for issue stage
     input         [4:0]     addr_iss_a,
@@ -46,7 +46,7 @@ module Registers (
 
     reg [5:0] i;
     generate
-        always @(posedge clock or negedge reset) begin
+        always @(negedge clock or negedge reset) begin
             if (~reset) begin
                 for (i=0; i<32; i=i+1) begin: Reg
                     registers[i] <= 32'h0000_0000;

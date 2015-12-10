@@ -44,9 +44,11 @@ module Mem_1 (
         if (~reset) begin
             m1_mem_regdest <= 5'b00000;
             m1_mem_writereg <= 1'b0;
+            m1_mem_wbvalue <= 32'h0000_0000;
         end else if (~m0_m1_oper) begin
             m1_mem_regdest <= 5'b00000;
             m1_mem_writereg <= 1'b0;
+            m1_mem_wbvalue <= 32'h0000_0000;
         end else begin
             m1_mem_regdest <= m0_m1_regdest;
             m1_mem_writereg <= m0_m1_writereg;
