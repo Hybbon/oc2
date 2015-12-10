@@ -169,6 +169,10 @@ module Issue (
     assign iss_reg_addra = id_iss_addra;
     assign iss_reg_addrb = id_iss_addrb;
 
+    assign writeaddr = id_iss_regdest;
+    assign registerunit = functional_unit;
+    assign enablewrite = id_iss_writereg && registerunit !== 2'b11;
+
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
             iss_ex_selalushift <= 1'b0;
