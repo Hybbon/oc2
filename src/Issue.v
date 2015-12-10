@@ -110,12 +110,13 @@ module Issue (
     );
 
     HazardDetector HDETECTOR (
-        .ass_pending_a(a_pending),
-        .ass_row_a(ass_row_a),
-        .ass_pending_b(b_pending),
-        .ass_row_b(ass_row_b),
-        .selregdest(id_iss_selregdest),
-        .stalled(iss_stall)
+        .iss_ass_pending_a(a_pending),
+        .iss_ass_row_a(ass_row_a),
+        .iss_check_a(1'b1),
+        .iss_ass_pending_b(b_pending),
+        .iss_ass_row_b(ass_row_b),
+        .iss_check_b(id_iss_selregdest),
+        .iss_stalled(iss_stall)
     );
 
     // 2'b00: AluMisc

@@ -36,6 +36,7 @@ assign iss_stalled =
     iss_check_b &&
     (iss_ass_pending_b && !(iss_ass_row_b[0]) || iss_ass_row_b[4:1] != 0);
 
+// Note: Decode and Fetch must also be stalled when Issue is stalled.
 assign id_stalled = iss_stalled || (
     id_check_a &&
     (id_ass_pending_a && !(id_ass_row_a[0]) || id_ass_row_a[4:1] != 0) ||
