@@ -5,18 +5,29 @@ module Scoreboard (
     input            clock,
     input            reset,
 
-    // inputs from issue stage, this is asynchronous
-    input      [4:0] ass_addr_a,      // requested register
-    output           ass_pending_a,   // register status
-    output     [1:0] ass_unit_a,      // register functional unit
-    output     [4:0] ass_row_a,       // register execution stage
+    // Issue stage asynchronous read interface
+    input      [4:0] iss_ass_addr_a,      // requested register
+    output           iss_ass_pending_a,   // register status
+    output     [1:0] iss_ass_unit_a,      // register functional unit
+    output     [4:0] iss_ass_row_a,       // register execution stage
 
-    input      [4:0] ass_addr_b,      // requested register
-    output           ass_pending_b,   // register status
-    output     [1:0] ass_unit_b,      // register functional unit
-    output     [4:0] ass_row_b,       // register execution stage
+    input      [4:0] iss_ass_addr_b,      // requested register
+    output           iss_ass_pending_b,   // register status
+    output     [1:0] iss_ass_unit_b,      // register functional unit
+    output     [4:0] iss_ass_row_b,       // register execution stage
 
-    // inputs from issue stage
+    // Decode stage asynchronous read interface
+    input      [4:0] id_ass_addr_a,      // requested register
+    output           id_ass_pending_a,   // register status
+    output     [1:0] id_ass_unit_a,      // register functional unit
+    output     [4:0] id_ass_row_a,       // register execution stage
+
+    input      [4:0] id_ass_addr_b,      // requested register
+    output           id_ass_pending_b,   // register status
+    output     [1:0] id_ass_unit_b,      // register functional unit
+    output     [4:0] id_ass_row_b,       // register execution stage
+
+    // Issue stage synchronous write interface
     input      [4:0] writeaddr,     // register to become pending
     input      [1:0] registerunit,  // which functional unit it is going to
     input            enablewrite   // prevent incorrect write (e.g. during stalls)
@@ -26,13 +37,21 @@ module Scoreboard (
     reg [5:0] i;
 
     // outputs requested register data
-    assign ass_pending_a = rows[ass_addr_a][7];
-    assign ass_unit_a    = rows[ass_addr_a][6:5];
-    assign ass_row_a     = rows[ass_addr_a][4:0];
-    
-    assign ass_pending_b = rows[ass_addr_b][7];
-    assign ass_unit_b    = rows[ass_addr_b][6:5];
-    assign ass_row_b     = rows[ass_addr_b][4:0];
+    assign iss_ass_pending_a = rows[iss_ass_addr_a][7];
+    assign iss_ass_unit_a    = rows[iss_ass_addr_a][6:5];
+    assign iss_ass_row_a     = rows[iss_ass_addr_a][4:0];
+
+    assign iss_ass_pending_b = rows[iss_ass_addr_b][7];
+    assign iss_ass_unit_b    = rows[iss_ass_addr_b][6:5];
+    assign iss_ass_row_b     = rows[iss_ass_addr_b][4:0];
+
+    assign id_ass_pending_a = rows[id_ass_addr_a][7];
+    assign id_ass_unit_a    = rows[id_ass_addr_a][6:5];
+    assign id_ass_row_a     = rows[id_ass_addr_a][4:0];
+
+    assign id_ass_pending_b = rows[id_ass_addr_b][7];
+    assign id_ass_unit_b    = rows[id_ass_addr_b][6:5];
+    assign id_ass_row_b     = rows[id_ass_addr_b][4:0];
 
     always @(posedge clock or negedge reset) begin
         if(~reset) begin

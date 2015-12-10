@@ -76,15 +76,16 @@ module Issue (
 
 );
 
-    wire       a_pending;
-    wire       b_pending;
+    // asynchronous scoreboard outputs
+    wire iss_ass_pending_a;
+    wire [1:0] iss_ass_unit_a;
+    wire [4:0] iss_ass_row_a;
 
-    wire [4:0] ass_row_a;
-    wire [4:0] ass_row_b;
+    wire iss_ass_pending_b;
+    wire [1:0] iss_ass_unit_b;
+    wire [4:0] iss_ass_row_b;
 
-    wire [1:0] ass_unit_a;
-    wire [1:0] ass_unit_b;
-
+    // synchronous scoreboard inputs
     wire [1:0] registerunit;
 
     wire [4:0] writeaddr;
@@ -94,15 +95,15 @@ module Issue (
         .clock(clock),
         .reset(reset),
 
-        .ass_addr_a(id_iss_addra),
-        .ass_pending_a(a_pending),
-        .ass_unit_a(ass_unit_a),
-        .ass_row_a(ass_row_a),
+        .iss_ass_addr_a(id_iss_addra),
+        .iss_ass_pending_a(iss_ass_pending_a),
+        .iss_ass_unit_a(iss_ass_unit_a),
+        .iss_ass_row_a(iss_ass_row_a),
 
-        .ass_addr_b(id_iss_addrb),
-        .ass_pending_b(b_pending),
-        .ass_unit_b(ass_unit_b),
-        .ass_row_b(ass_row_b),
+        .iss_ass_addr_b(id_iss_addrb),
+        .iss_ass_pending_b(iss_ass_pending_b),
+        .iss_ass_unit_b(iss_ass_unit_b),
+        .iss_ass_row_b(iss_ass_row_b),
 
         .writeaddr(writeaddr),
         .registerunit(registerunit),
@@ -110,11 +111,11 @@ module Issue (
     );
 
     HazardDetector HDETECTOR (
-        .iss_ass_pending_a(a_pending),
-        .iss_ass_row_a(ass_row_a),
+        .iss_ass_pending_a(iss_ass_pending_a),
+        .iss_ass_row_a(iss_ass_row_a),
         .iss_check_a(1'b1),
-        .iss_ass_pending_b(b_pending),
-        .iss_ass_row_b(ass_row_b),
+        .iss_ass_pending_b(iss_ass_pending_b),
+        .iss_ass_row_b(iss_ass_row_b),
         .iss_check_b(id_iss_selregdest),
         .iss_stalled(iss_stall)
     );
