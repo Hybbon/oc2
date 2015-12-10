@@ -4,53 +4,55 @@
 
 module HazardDetector_TB0;
 
-    reg ass1_pending;
-    reg [4:0] ass1_row;
-    reg ass2_pending;
-    reg [4:0] ass2_row;
-    wire stalled;
-    reg selregdest;
+    reg iss_ass_pending_a;
+    reg [4:0] iss_ass_row_a;
+    reg iss_check_a;
+    reg iss_ass_pending_b;
+    reg [4:0] iss_ass_row_b;
+    reg iss_check_b;
+    wire iss_stalled;
 
     HazardDetector HZ(
-        .ass_pending_a (ass1_pending),
-        .ass_row_a (ass1_row),
+        .iss_ass_pending_a(iss_ass_pending_a),
+        .iss_ass_row_a(iss_ass_row_a),
+        .iss_check_a(iss_check_a),
 
-        .ass_pending_b (ass2_pending),
-        .ass_row_b (ass2_row),
+        .iss_ass_pending_b(iss_ass_pending_b),
+        .iss_ass_row_b(iss_ass_row_b),
+        .iss_check_b(iss_check_b),
 
-        .selregdest(selregdest),
-
-        .stalled(stalled)
+        .iss_stalled(iss_stalled)
     );
 
     initial begin
         $dumpfile("mult_tb0.vcd");
         $dumpvars;
 
-        $display("A1P\tA1R\tA2P\tA2R\tSelregdest\tStall?");
-        $monitor("%b\t%b\t%b\t%b\t%b\t%b", ass1_pending, ass1_row,
-                                       ass2_pending, ass2_row,
-                                       selregdest, stalled); 
+        $display("A1P\tA1R\tA2P\tA2R\tChkA\tChkB\tIssSt");
+        $monitor("%b\t%b\t%b\t%b\t%b\t%b\t%b",
+            iss_ass_pending_a, iss_ass_row_a, iss_ass_pending_b, iss_ass_row_b,
+            iss_check_a, iss_check_b, iss_stalled);
 
         #500 $finish;
     end
 
     initial begin
-        selregdest = 1'b1;
-        ass1_pending = 1'b0;
-        ass2_pending = 1'b0;
-        ass1_row = 5'b00000;
-        ass2_row = 5'b00000;
-        #5 ass1_row = 5'b00100;
-        #5 ass1_row = 5'b00001;
-        #5 ass2_row = 5'b10000;
-        #5 ass2_pending = 1'b1;
-        #5 ass2_row = 5'b00001;
-        #5 ass2_pending = 1'b0;
-        #5 ass2_row = 5'b10000;
-        #5 selregdest = 1'b0;
-        #5 selregdest = 1'b1;
+        iss_check_a = 1'b1;
+        iss_check_b = 1'b1;
+        iss_ass_pending_a = 1'b0;
+        iss_ass_pending_b = 1'b0;
+        iss_ass_row_a = 5'b00000;
+        iss_ass_row_b = 5'b00000;
+        #5 iss_ass_row_a = 5'b00100;
+        #5 iss_ass_row_a = 5'b00001;
+        #5 iss_ass_row_b = 5'b10000;
+        #5 iss_ass_pending_b = 1'b1;
+        #5 iss_ass_row_b = 5'b00001;
+        #5 iss_ass_pending_b = 1'b0;
+        #5 iss_ass_row_b = 5'b10000;
+        #5 iss_check_b = 1'b0;
+        #5 iss_check_b = 1'b1;
 
         #500 $finish;
-    end 
+    end
 endmodule
