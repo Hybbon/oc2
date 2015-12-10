@@ -154,7 +154,7 @@ module Issue (
         .id_ass_pending_b(id_ass_pending_b),
         .id_ass_row_b(id_ass_row_b),
         .id_check_b(id_hd_check_b),
-        .id_stalled(id_stall)
+        .id_stalled(hd_id_stall)
     );
 
     // 2'b00: AluMisc
