@@ -25,6 +25,18 @@ module Mult (
 
 assign mul_wb_oper = mul_wb_writereg;
 
+wire m0_m1_oper;
+wire m1_m2_oper;
+wire m2_m3_oper;
+
+wire m0_m1_ispositive;
+wire m1_m2_ispositive;
+wire m2_m3_ispositive;
+
+wire m0_m1_iszero;
+wire m1_m2_iszero;
+wire m2_m3_iszero;
+
 wire [31:0] m0_m1_rega;
 wire [31:0] m1_m2_rega;
 

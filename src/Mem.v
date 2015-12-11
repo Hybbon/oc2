@@ -48,6 +48,11 @@ module Mem (
 
     assign mem_wb_oper = mem_wb_writereg;
 
+    wire m0_m1_oper;
+    wire m0_m1_readmem;
+    wire m0_m1_writemem;
+    wire m0_m1_writereg;
+
     wire [31:0] m0_m1_data_addr;
     wire [31:0] m0_m1_regb;
     wire [4:0] m0_m1_regdest;
