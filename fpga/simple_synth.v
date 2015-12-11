@@ -1,11 +1,9 @@
-`include "./src/Mips.v"
 `include "./fpga/DisplayDecoder.v"
 `include "./fpga/ClockDivider.v"
 
-module mips_synth(
-    input [3:0] KEY,
-    input [17:0] SW,
+module simple_synth (
     input CLOCK_50,
+    input [3:0] KEY,
     output [0:6] HEX0,
     output [0:6] HEX1,
     output [0:6] HEX2,
@@ -14,25 +12,13 @@ module mips_synth(
     output [0:6] HEX5,
     output [0:6] HEX6,
     output [0:6] HEX7,
-    output [7:0] LEDG,
-    output [17:0] LEDR
+    output [7:0] LEDG
 );
 
-    wire reset;
-    assign reset = KEY[2];
-
-    wire display_mode;
-    assign display_mode = SW[17];
-
-    wire [31:0] reg_out_data;
-
-    wire [31:0] reg_out_0;
-    wire [31:0] reg_out_1;
-    wire [31:0] reg_out_2;
-    wire [31:0] reg_out_3;
-    wire [31:0] reg_out_4;
-
     wire clock;
+    wire reset;
+
+    assign reset = KEY[0];
 
     ClockDivider cd (
         .in(CLOCK_50),
@@ -42,21 +28,16 @@ module mips_synth(
     );
 
     assign LEDG[0] = clock;
-    assign LEDG[1] = display_mode;
 
-    Mips mips(
-        .clock(clock),
-        .reset(reset),
-        .reg_out_id(SW[4:0]),
-        .reg_out_data(reg_out_data),
-        .fetch_ram_load(SW[5]),
-        .mem_ram_load(SW[6]),
-        .reg_out_0(reg_out_0),
-        .reg_out_1(reg_out_1),
-        .reg_out_2(reg_out_2),
-        .reg_out_3(reg_out_3),
-        .reg_out_4(reg_out_4)
-    );
+    reg [31:0] val;
+
+    always@(posedge clock or negedge reset) begin
+        if (~reset) begin
+            val <= 32'h0000_0000;
+        end else begin
+            val <= val + 32'h0000_0001;
+        end
+    end
 
     wire [3:0] dd7_in;
     wire [3:0] dd6_in;
@@ -66,19 +47,6 @@ module mips_synth(
     wire [3:0] dd2_in;
     wire [3:0] dd1_in;
     wire [3:0] dd0_in;
-
-    wire [31:0] val;
-
-    assign val = {
-        display_mode ? reg_out_data[31:28] : 4'hB,
-        display_mode ? reg_out_data[27:24] : 4'hD,
-        display_mode ? reg_out_data[23:20] : 4'h0,
-        display_mode ? reg_out_data[19:16] : reg_out_4[3:0],
-        display_mode ? reg_out_data[15:12] : reg_out_3[3:0],
-        display_mode ? reg_out_data[11:8] : reg_out_2[3:0],
-        display_mode ? reg_out_data[7:4] : reg_out_1[3:0],
-        display_mode ? reg_out_data[3:0] : reg_out_0[3:0]
-    };
 
     assign dd7_in = val[31:28];
     assign dd6_in = val[27:24];
