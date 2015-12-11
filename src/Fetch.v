@@ -42,6 +42,7 @@ module Fetch (
         if (~reset) begin
             if_id_instruc <= 32'h0000_0000;
             pc <= 32'h0000_0000;
+            if_id_nextpc <= 32'h0000_0000;
         end else begin
             if (id_stall) begin
                 // issue stall should keep current instruction
@@ -65,6 +66,7 @@ module Fetch (
                         //default: pc <= 32'hXXXX_XXXX;
                     endcase
                 end else begin
+                    if_id_nextpc <= pc + 32'h0000_0004;
                     pc <= pc + 32'h0000_0004;
                 end
             end

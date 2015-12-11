@@ -76,6 +76,10 @@ module Decode (
     wire             writeov;
     wire    [2:0]    compop;
 
+    reg discard_instruction; // The instruction that comes after a branch must
+                             // be discarded. This register keeps track of
+                             // when a branch happens.
+
     assign id_if_rega = reg_id_ass_dataa;
     assign id_reg_addra = if_id_instruc[25:21];
     assign id_reg_addrb = if_id_instruc[20:16];
@@ -133,9 +137,11 @@ module Decode (
             id_iss_addra <= 5'b00000;
             id_iss_addrb <= 5'b00000;
 
+            discard_instruction <= 1'b0;
+
         end else begin
             // Fix stalls caused by issue stage
-            if (~id_stall) begin
+            if (~id_stall && ~discard_instruction) begin
                 id_iss_selalushift <= selalushift;
                 id_iss_selimregb <= selimregb;
                 id_iss_aluop <= aluop;
@@ -155,6 +161,11 @@ module Decode (
 
                 id_iss_addra <= id_reg_addra;
                 id_iss_addrb <= id_reg_addrb;
+            end
+            if (id_if_selpcsource) begin
+                discard_instruction <= 1'b1;
+            end else begin
+                discard_instruction <= 1'b0;
             end
         end
     end

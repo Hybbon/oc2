@@ -1,5 +1,7 @@
 nop
 nop
+addi $t3, $zero, 3
+addi $t3, $zero, 0
 addi $t2, $zero, 0
 addi $t1, $zero, 10
 j jOk
@@ -7,25 +9,32 @@ addi $t2, $zero, 20
 jOk:
 addi $t0, $zero, 10
 addi $t4, $zero, 40
-nop
-nop
 beq $t0, $t1, beqOk
+nop
 addi $t2, $zero, 20
 beqOk:
 bne $t4, $t0, bneOk
+nop
 addi $t2, $zero, 20
 bneOk:
 blez $zero, blezOk
+nop
 addi $t2, $zero, 20
 blezOk:
 bgtz $t4, bgtzOk
+nop
 addi $t2, $zero, 20
 bgtzOk:
 beq $t1, $zero, logicalFailure
+nop
 bne $t2, $zero, logicalFailure
+nop
 blez $t1, logicalFailure
+nop
 bgtz $zero, logicalFailure
+nop
 j end
+nop
 logicalFailure:
 addi $t2, $zero, 20
 end:

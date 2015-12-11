@@ -33,15 +33,16 @@ module Mips_TB;
         $dumpfile("mips_tb2.vcd");
         $dumpvars;
 
-        $display("\t\t$t2\t$t0\t$t1\t$t3");
+        $display("\t\t$t2\t$t0\t$t1\t$t3\t$t4");
         $monitor("\t%d%d%d\t%d",
             mips.REGISTERS.registers[10],
             mips.REGISTERS.registers[8],
             mips.REGISTERS.registers[9],
-            mips.REGISTERS.registers[11]
+            mips.REGISTERS.registers[11],
+            mips.REGISTERS.registers[12]
         );
 
-        #3000 $finish;
+        #30000 $finish;
     end
 
     initial begin
