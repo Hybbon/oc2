@@ -33,7 +33,10 @@ module Scoreboard (
     // 2'b00: AluMisc
     // 2'b01: Mem
     // 2'b10: Mult
-    input            enablewrite   // prevent incorrect write (e.g. during stalls)
+    input            enablewrite,  // prevent incorrect write (e.g. during stalls)
+
+    // Writeback structural hazard prevention asynchronous interface
+    output [31:0] sb_haz_column
 );
 
     reg [7:0] rows[31:0];
@@ -58,13 +61,10 @@ module Scoreboard (
 
     always @(posedge clock or negedge reset) begin
         if(~reset) begin
-
             for (i=0; i<32; i=i+1) begin
                 rows[i] <= 8'b0ZZ00000;
             end
-
         end else begin
-
             for (i=0; i<32; i=i+1) begin
                 // updates the positions of the data
                 rows[i][4:0] = rows[i][4:0] >> 1;
@@ -93,6 +93,81 @@ module Scoreboard (
         end
     end
 
+    // Returns a given column of the Scoreboard, depending on the functional
+    // unit to be written. I have no idea how generate statements work.
+    assign sb_haz_column =
+    registerunit === 2'b00 ?
+    {
+        rows[0][2],
+        rows[1][2],
+        rows[2][2],
+        rows[3][2],
+        rows[4][2],
+        rows[5][2],
+        rows[6][2],
+        rows[7][2],
+        rows[8][2],
+        rows[9][2],
+        rows[10][2],
+        rows[11][2],
+        rows[12][2],
+        rows[13][2],
+        rows[14][2],
+        rows[15][2],
+        rows[16][2],
+        rows[17][2],
+        rows[18][2],
+        rows[19][2],
+        rows[20][2],
+        rows[21][2],
+        rows[22][2],
+        rows[23][2],
+        rows[24][2],
+        rows[25][2],
+        rows[26][2],
+        rows[27][2],
+        rows[28][2],
+        rows[29][2],
+        rows[30][2],
+        rows[31][2]
+    } // am
+    : ( registerunit === 2'b01 ?
+    {
+        rows[0][3],
+        rows[1][3],
+        rows[2][3],
+        rows[3][3],
+        rows[4][3],
+        rows[5][3],
+        rows[6][3],
+        rows[7][3],
+        rows[8][3],
+        rows[9][3],
+        rows[10][3],
+        rows[11][3],
+        rows[12][3],
+        rows[13][3],
+        rows[14][3],
+        rows[15][3],
+        rows[16][3],
+        rows[17][3],
+        rows[18][3],
+        rows[19][3],
+        rows[20][3],
+        rows[21][3],
+        rows[22][3],
+        rows[23][3],
+        rows[24][3],
+        rows[25][3],
+        rows[26][3],
+        rows[27][3],
+        rows[28][3],
+        rows[29][3],
+        rows[30][3],
+        rows[31][3]
+    } : ( registerunit === 2'b10 ?
+        32'h0000_0000 : 32'hXXXX_XXXX
+    ));
 endmodule
 
 `endif

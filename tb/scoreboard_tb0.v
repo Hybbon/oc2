@@ -15,6 +15,8 @@ module tb_scoreboard();
     reg [1:0] func_unit;
     reg       enablewrite;
 
+    wire [31:0] sb_haz_column;
+
     reg [5:0] i;
 
     integer cur_time;
@@ -28,15 +30,17 @@ module tb_scoreboard();
                  .iss_ass_row_a(valuerow),
                  .registerunit(func_unit),
                  .writeaddr(addrpending),
-                 .enablewrite(enablewrite));
+                 .enablewrite(enablewrite),
+                 .sb_haz_column(sb_haz_column)
+    );
 
     initial begin
         #1
         $dumpfile("scoreboard_tb0.vcd");
         $dumpvars;        
 
-        $display("\tTime\tClock\tRegister\tPending\t\tUnit\tData position");
-        $monitor("%d\t%d\t%d\t\t%b\t\t%d\t%b", cur_time, clock, readaddress, valuepending, valueunit, valuerow);
+        $display("\tTime\tClock\tRegister\tPending\t\tUnit\tData position\tHaz_Col");
+        $monitor("%d\t%d\t%d\t\t%b\t\t%d\t%b", cur_time, clock, readaddress, valuepending, valueunit, valuerow, sb_haz_column);
 
         #51 $finish;
     end
@@ -46,10 +50,11 @@ module tb_scoreboard();
         #4
         // register 4, memory operation
         addrpending <= 5'd4;
-        func_unit   <= 2'd1;
+        func_unit   <= 2'd2;
         enablewrite <= 1'b1;
-        #7
+        #6
         enablewrite <= 0;
+        func_unit <= 2'd0;
     end
 
     initial begin
