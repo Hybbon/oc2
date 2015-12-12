@@ -69,7 +69,7 @@ module Mem (
         .mem_m0_regb(iss_mem_regb),
         .mem_m0_regdest(iss_mem_regdest),
         .mem_m0_writereg(iss_mem_writereg),
-        
+
         .m0_m1_oper(m0_m1_oper),
         .m0_m1_readmem(m0_m1_readmem),
         .m0_m1_writemem(m0_m1_writemem),

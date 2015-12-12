@@ -20,7 +20,7 @@ module Mem_1 (
     output reg m1_mem_writereg,
     output reg [31:0] m1_mem_wbvalue
 );
-    
+
     wire [6:0] data_addr;
     assign data_addr = m0_m1_data_addr[8:2];
 
