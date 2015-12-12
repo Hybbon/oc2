@@ -57,7 +57,11 @@ module Decode (
     output [4:0] id_hd_ass_addra,
     output id_hd_check_a,
     output [4:0] id_hd_ass_addrb,
-    output id_hd_check_b
+    output id_hd_check_b,
+
+    // WAW Hazard detection interface
+    output [4:0] id_ass_waw_write_addr,
+    output id_ass_waw_write_writereg
 );
 
     wire    [1:0]    selbrjumpz;
@@ -96,6 +100,9 @@ module Decode (
     assign id_hd_check_b = selbrjumpz === 2'b10 && (
         compop === 2'b00 || compop === 2'b01
     );
+
+    assign id_ass_waw_write_addr = (selregdest) ? if_id_instruc[15:11] : if_id_instruc[20:16];
+    assign id_ass_waw_write_writereg = writereg;
 
     Comparator COMPARATOR(.a(reg_id_ass_dataa),.b(reg_id_ass_datab),.op(compop),.compout(compout));
     Control CONTROL(.op(if_id_instruc[31:26]),.fn(if_id_instruc[5:0]),

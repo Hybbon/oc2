@@ -132,6 +132,9 @@ module Mips (
     wire [4:0] id_hd_ass_addrb;
     wire id_hd_check_b;
 
+    wire [4:0] id_ass_waw_write_addr;
+    wire id_ass_waw_write_writereg;
+
     Decode DECODE(
         .clock(clock),
         .reset(reset),
@@ -174,7 +177,10 @@ module Mips (
         .id_hd_ass_addra(id_hd_ass_addra),
         .id_hd_check_a(id_hd_check_a),
         .id_hd_ass_addrb(id_hd_ass_addrb),
-        .id_hd_check_b(id_hd_check_b)
+        .id_hd_check_b(id_hd_check_b),
+
+        .id_ass_waw_write_addr(id_ass_waw_write_addr),
+        .id_ass_waw_write_writereg(id_ass_waw_write_writereg)
     );
 
     ///////////
@@ -266,6 +272,9 @@ module Mips (
         .id_hd_check_a(id_hd_check_a),
         .id_hd_ass_addrb(id_hd_ass_addrb),
         .id_hd_check_b(id_hd_check_b),
+
+        .id_ass_waw_write_addr(id_ass_waw_write_addr),
+        .id_ass_waw_write_writereg(id_ass_waw_write_writereg),
 
         .hd_id_stall(id_stall)
     );

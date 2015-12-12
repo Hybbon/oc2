@@ -79,6 +79,10 @@ module Issue (
     input [4:0] id_hd_ass_addrb,
     input id_hd_check_b,
 
+    // WAW Hazard detection interface
+    input [4:0] id_ass_waw_write_addr,
+    input id_ass_waw_write_writereg,
+
     // Branch-related decode and fetch stall
     output hd_id_stall
 
@@ -103,6 +107,11 @@ module Issue (
     wire id_ass_pending_b;
     wire [1:0] id_ass_unit_b; // Not actually used
     wire [4:0] id_ass_row_b;
+
+
+    wire id_ass_waw_write_pending;
+    wire [1:0] id_ass_waw_write_unit;
+    wire [4:0] id_ass_waw_write_row;
 
     // synchronous scoreboard inputs
     wire [1:0] registerunit;
@@ -136,6 +145,11 @@ module Issue (
         .id_ass_unit_b(id_ass_unit_b),
         .id_ass_row_b(id_ass_row_b),
 
+        .id_ass_waw_write_addr(id_ass_waw_write_addr),
+        .id_ass_waw_write_pending(id_ass_waw_write_pending),
+        .id_ass_waw_write_unit(id_ass_waw_write_unit),
+        .id_ass_waw_write_row(id_ass_waw_write_row),
+
         .writeaddr(writeaddr),
         .registerunit(registerunit),
         .enablewrite(enablewrite),
@@ -161,6 +175,10 @@ module Issue (
 
         .iss_ass_writereg(enablewrite),
         .sb_haz_column(sb_haz_column),
+
+        .id_ass_waw_write_pending(id_ass_waw_write_pending),
+        .id_ass_waw_write_row(id_ass_waw_write_row),
+        .id_ass_waw_write_check(id_ass_waw_write_writereg),
 
         .id_stalled(hd_id_stall)
     );
