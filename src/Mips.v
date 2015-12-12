@@ -271,33 +271,33 @@ module Mips (
     );
 
     // Alumisc outputs
-    wire [4:0] a3_wb_regdest;
-    wire a3_wb_writereg;
-    wire [31:0] a3_wb_wbvalue;
-    wire a3_wb_oper;
+    wire [4:0] am_wb_regdest;
+    wire am_wb_writereg;
+    wire [31:0] am_wb_wbvalue;
+    wire am_wb_oper;
 
     AluMisc ALUMISC (
         .clock(clock),
         .reset(reset),
 
-        .iss_a0_oper(iss_am_oper),
-        .iss_a0_selalushift(iss_ex_selalushift),
-        .iss_a0_selimregb(iss_ex_selimregb),
-        .iss_a0_aluop(iss_ex_aluop),
-        .iss_a0_unsig(iss_ex_unsig),
-        .iss_a0_shiftop(iss_ex_shiftop),
-        .iss_a0_shiftamt(iss_ex_shiftamt),
-        .iss_a0_rega(iss_ex_rega),
-        .iss_a0_regb(iss_ex_regb),
-        .iss_a0_imedext(iss_ex_imedext),
-        .iss_a0_regdest(iss_ex_regdest),
-        .iss_a0_writereg(iss_ex_writereg),
-        .iss_a0_writeov(iss_ex_writeov),
+        .iss_am_oper(iss_am_oper),
+        .iss_am_selalushift(iss_ex_selalushift),
+        .iss_am_selimregb(iss_ex_selimregb),
+        .iss_am_aluop(iss_ex_aluop),
+        .iss_am_unsig(iss_ex_unsig),
+        .iss_am_shiftop(iss_ex_shiftop),
+        .iss_am_shiftamt(iss_ex_shiftamt),
+        .iss_am_rega(iss_ex_rega),
+        .iss_am_regb(iss_ex_regb),
+        .iss_am_imedext(iss_ex_imedext),
+        .iss_am_regdest(iss_ex_regdest),
+        .iss_am_writereg(iss_ex_writereg),
+        .iss_am_writeov(iss_ex_writeov),
 
-        .a3_wb_regdest(a3_wb_regdest),
-        .a3_wb_writereg(a3_wb_writereg),
-        .a3_wb_wbvalue(a3_wb_wbvalue),
-        .a3_wb_oper(a3_wb_oper)
+        .am_wb_regdest(am_wb_regdest),
+        .am_wb_writereg(am_wb_writereg),
+        .am_wb_wbvalue(am_wb_wbvalue),
+        .am_wb_oper(am_wb_oper)
     );
 
     // Mem outputs
@@ -365,10 +365,10 @@ module Mips (
         .mul_wb_wbvalue(mul_wb_wbvalue),
 
         // AluMisc
-        .am_wb_oper(a3_wb_oper),
-        .am_wb_regdest(a3_wb_regdest),
-        .am_wb_writereg(a3_wb_writereg),
-        .am_wb_wbvalue(a3_wb_wbvalue),
+        .am_wb_oper(am_wb_oper),
+        .am_wb_regdest(am_wb_regdest),
+        .am_wb_writereg(am_wb_writereg),
+        .am_wb_wbvalue(am_wb_wbvalue),
 
         // Mem
         .mem_wb_regdest(mem_wb_regdest),

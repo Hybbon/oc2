@@ -30,6 +30,9 @@ module Scoreboard (
     // Issue stage synchronous write interface
     input      [4:0] writeaddr,     // register to become pending
     input      [1:0] registerunit,  // which functional unit it is going to
+    // 2'b00: AluMisc
+    // 2'b01: Mem
+    // 2'b10: Mult
     input            enablewrite   // prevent incorrect write (e.g. during stalls)
 );
 
@@ -67,7 +70,7 @@ module Scoreboard (
                 rows[i][4:0] = rows[i][4:0] >> 1;
                 if(rows[i][4:0] == 5'b00000) begin
                     // register is not pending anymore
-                    rows[i][7:5]  = 3'b0ZZ;
+                    rows[i][7:5] = 3'b0ZZ;
                 end
             end
 
@@ -77,7 +80,14 @@ module Scoreboard (
                 // and we write its functional unity
                 rows[writeaddr][7] = 1'b1;
                 rows[writeaddr][6:5] = registerunit;
-                rows[writeaddr][4] = 1'b1;
+                case (registerunit)
+                    2'b00: rows[writeaddr][1] = 1'b1; // am
+                    2'b01: rows[writeaddr][2] = 1'b1; // mem
+                    2'b10: rows[writeaddr][4] = 1'b1; // mult
+                    // The two below should hopefully never happen
+                    2'b11: rows[writeaddr][4] = 1'b1;
+                    default: rows[writeaddr][4] = 1'b1;
+                endcase
             end
 
         end

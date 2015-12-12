@@ -31,7 +31,7 @@ module Mips_TB;
         $dumpvars;
 
         $display("\t\tA\tB\tOut\tAluOP");
-        $monitor("\t%d%d%d\t%d", mips.ALUMISC.iss_a0_rega, mips.ALUMISC.mux_imregb, mips.ALUMISC.aluout, mips.ALUMISC.iss_a0_aluop);
+        $monitor("\t%d%d%d\t%d", mips.ALUMISC.iss_am_rega, mips.ALUMISC.mux_imregb, mips.ALUMISC.aluout, mips.ALUMISC.iss_am_aluop);
 
         #500 $finish;
     end
