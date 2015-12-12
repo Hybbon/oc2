@@ -46,7 +46,10 @@ module Mem (
     output mem_wb_oper
 );
 
-    assign mem_wb_oper = mem_wb_writereg;
+    assign mem_wb_oper = m3_wb_oper;
+    assign mem_wb_regdest = m3_wb_regdest;
+    assign mem_wb_writereg = m3_wb_writereg;
+    assign mem_wb_wbvalue = m3_wb_wbvalue;
 
     wire m0_m1_oper;
     wire m0_m1_readmem;
@@ -56,6 +59,21 @@ module Mem (
     wire [31:0] m0_m1_data_addr;
     wire [31:0] m0_m1_regb;
     wire [4:0] m0_m1_regdest;
+
+    wire m1_m2_oper;
+    wire [4:0] m1_m2_regdest;
+    wire m1_m2_writereg;
+    wire [31:0] m1_m2_wbvalue;
+
+    reg m2_m3_oper;
+    reg [4:0] m2_m3_regdest;
+    reg m2_m3_writereg;
+    reg [31:0] m2_m3_wbvalue;
+
+    reg m3_wb_oper;
+    reg [4:0] m3_wb_regdest;
+    reg m3_wb_writereg;
+    reg [31:0] m3_wb_wbvalue;
 
     Mem_0 MEM_0 (
         .clock(clock),
@@ -92,11 +110,48 @@ module Mem (
         .m0_m1_regdest(m0_m1_regdest),
         .m0_m1_writereg(m0_m1_writereg),
 
-        .m1_mem_regdest(mem_wb_regdest),
-        .m1_mem_writereg(mem_wb_writereg),
-        .m1_mem_wbvalue(mem_wb_wbvalue)
+        .m1_m2_oper(m1_m2_oper),
+        .m1_m2_regdest(m1_m2_regdest),
+        .m1_m2_writereg(m1_m2_writereg),
+        .m1_m2_wbvalue(m1_m2_wbvalue)
     );
 
+    always @(posedge clock or negedge reset) begin
+        // AluMisc_2
+        if (~reset) begin
+            m2_m3_oper <= 1'b0;  
+            m2_m3_regdest <= 5'b00000;
+            m2_m3_writereg <= 1'b0;
+            m2_m3_wbvalue <= 32'h0000_0000;
+        end else if (~m1_m2_oper) begin
+            m2_m3_oper <= 1'b0;  
+            m2_m3_regdest <= 5'b00000;
+            m2_m3_writereg <= 1'b0;
+            m2_m3_wbvalue <= 32'h0000_0000;
+        end else begin
+            m2_m3_oper <= 1'b1;
+            m2_m3_regdest <= m1_m2_regdest;
+            m2_m3_writereg <= m1_m2_writereg;
+            m2_m3_wbvalue <= m1_m2_wbvalue;
+        end
+        // AluMisc_3
+        if (~reset) begin
+            m3_wb_oper <= 1'b0;
+            m3_wb_regdest <= 5'b00000;
+            m3_wb_writereg <= 1'b0;
+            m3_wb_wbvalue <= 32'h0000_0000;
+        end else if (~m2_m3_oper) begin
+            m3_wb_oper <= 1'b0;
+            m3_wb_regdest <= 5'b00000;
+            m3_wb_writereg <= 1'b0;
+            m3_wb_wbvalue <= 32'h0000_0000;
+        end else begin
+            m3_wb_oper <= 1'b1;
+            m3_wb_regdest <= m2_m3_regdest;
+            m3_wb_writereg <= m2_m3_writereg;
+            m3_wb_wbvalue <= m2_m3_wbvalue;
+        end
+    end
 endmodule
 
 `endif

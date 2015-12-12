@@ -16,9 +16,10 @@ module Mem_1 (
     input [4:0] m0_m1_regdest,
     input m0_m1_writereg,
 
-    output reg [4:0] m1_mem_regdest,
-    output reg m1_mem_writereg,
-    output reg [31:0] m1_mem_wbvalue
+    output reg m1_m2_oper,
+    output reg [4:0] m1_m2_regdest,
+    output reg m1_m2_writereg,
+    output reg [31:0] m1_m2_wbvalue
 );
     
     wire [6:0] data_addr;
@@ -42,17 +43,20 @@ module Mem_1 (
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
-            m1_mem_regdest <= 5'b00000;
-            m1_mem_writereg <= 1'b0;
-            m1_mem_wbvalue <= 32'h0000_0000;
+            m1_m2_oper <= 1'b0;
+            m1_m2_regdest <= 5'b00000;
+            m1_m2_writereg <= 1'b0;
+            m1_m2_wbvalue <= 32'h0000_0000;
         end else if (~m0_m1_oper) begin
-            m1_mem_regdest <= 5'b00000;
-            m1_mem_writereg <= 1'b0;
-            m1_mem_wbvalue <= 32'h0000_0000;
+            m1_m2_oper <= 1'b0;
+            m1_m2_regdest <= 5'b00000;
+            m1_m2_writereg <= 1'b0;
+            m1_m2_wbvalue <= 32'h0000_0000;
         end else begin
-            m1_mem_regdest <= m0_m1_regdest;
-            m1_mem_writereg <= m0_m1_writereg;
-            m1_mem_wbvalue <= data_data_out;
+            m1_m2_oper <= 1'b1;
+            m1_m2_regdest <= m0_m1_regdest;
+            m1_m2_writereg <= m0_m1_writereg;
+            m1_m2_wbvalue <= data_data_out;
         end
     end
    
