@@ -27,6 +27,12 @@ module Scoreboard (
     output     [1:0] id_ass_unit_b,      // register functional unit
     output     [4:0] id_ass_row_b,       // register execution stage
 
+    // WAW hazard prevention asynchronous interface from Decode
+    input [4:0] id_ass_waw_write_addr,
+    output           id_ass_waw_write_pending,
+    output     [1:0] id_ass_waw_write_unit,
+    output     [4:0] id_ass_waw_write_row,
+
     // Issue stage synchronous write interface
     input      [4:0] writeaddr,     // register to become pending
     input      [1:0] registerunit,  // which functional unit it is going to
@@ -58,6 +64,10 @@ module Scoreboard (
     assign id_ass_pending_b = rows[id_ass_addr_b][7];
     assign id_ass_unit_b    = rows[id_ass_addr_b][6:5];
     assign id_ass_row_b     = rows[id_ass_addr_b][4:0];
+
+    assign id_ass_waw_write_pending = rows[id_ass_waw_write_addr][7];
+    assign id_ass_waw_write_unit    = rows[id_ass_waw_write_addr][6:5];
+    assign id_ass_waw_write_row     = rows[id_ass_waw_write_addr][4:0];
 
     always @(posedge clock or negedge reset) begin
         if(~reset) begin

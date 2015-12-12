@@ -30,6 +30,11 @@ module HazardDetector (
     input iss_ass_writereg,
     input [31:0] sb_haz_column,
 
+    // WAW hazard check
+    input id_ass_waw_write_pending,
+    input [4:0] id_ass_waw_write_row,
+    input id_ass_waw_write_check,
+
     output id_stalled
 
 );
@@ -46,7 +51,10 @@ assign id_stalled = iss_stalled || (
     id_check_a &&
     (id_ass_pending_a && !(id_ass_row_a[0]) || id_ass_row_a[4:1] != 0) ||
     id_check_b &&
-    (id_ass_pending_b && !(id_ass_row_b[0]) || id_ass_row_b[4:1] != 0)
+    (id_ass_pending_b && !(id_ass_row_b[0]) || id_ass_row_b[4:1] != 0) ||
+    id_ass_waw_write_check &&
+    (id_ass_waw_write_pending && !(id_ass_waw_write_row[0]) ||
+        id_ass_waw_write_row[4:1] != 0)
 );
 
 endmodule

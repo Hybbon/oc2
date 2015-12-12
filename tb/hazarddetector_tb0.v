@@ -16,6 +16,10 @@ module HazardDetector_TB0;
 
     wire iss_stalled;
 
+    reg id_check_a = 1'b0;
+    reg id_check_b = 1'b0;
+    reg id_ass_waw_write_check = 1'b0;
+
     HazardDetector HZ(
         .iss_ass_pending_a(iss_ass_pending_a),
         .iss_ass_row_a(iss_ass_row_a),
@@ -24,6 +28,10 @@ module HazardDetector_TB0;
         .iss_ass_pending_b(iss_ass_pending_b),
         .iss_ass_row_b(iss_ass_row_b),
         .iss_check_b(iss_check_b),
+
+        .id_check_a(id_check_a),
+        .id_check_b(id_check_b),
+        .id_ass_waw_write_check(id_ass_waw_write_check),
 
         .iss_ass_writereg(iss_ass_writereg),
         .sb_haz_column(sb_haz_column),
