@@ -26,6 +26,10 @@ module HazardDetector (
     input [4:0] id_ass_row_b,
     input id_check_b,
 
+    // Writeback structural hazard check
+    input iss_ass_writereg,
+    input [31:0] sb_haz_column,
+
     output id_stalled
 
 );
@@ -34,7 +38,8 @@ assign iss_stalled =
     iss_check_a &&
     (iss_ass_pending_a && !(iss_ass_row_a[0]) || iss_ass_row_a[4:1] != 0) ||
     iss_check_b &&
-    (iss_ass_pending_b && !(iss_ass_row_a[0]) || iss_ass_row_b[4:1] != 0);
+    (iss_ass_pending_b && !(iss_ass_row_a[0]) || iss_ass_row_b[4:1] != 0) ||
+    iss_ass_writereg && (sb_haz_column != 0);
 
 // Note: Decode and Fetch must also be stalled when Issue is stalled.
 assign id_stalled = iss_stalled || (

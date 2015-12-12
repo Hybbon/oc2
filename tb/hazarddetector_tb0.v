@@ -10,6 +10,10 @@ module HazardDetector_TB0;
     reg iss_ass_pending_b;
     reg [4:0] iss_ass_row_b;
     reg iss_check_b;
+
+    reg iss_ass_writereg;
+    reg [31:0] sb_haz_column;
+
     wire iss_stalled;
 
     HazardDetector HZ(
@@ -21,6 +25,8 @@ module HazardDetector_TB0;
         .iss_ass_row_b(iss_ass_row_b),
         .iss_check_b(iss_check_b),
 
+        .iss_ass_writereg(iss_ass_writereg),
+        .sb_haz_column(sb_haz_column),
         .iss_stalled(iss_stalled)
     );
 
@@ -28,10 +34,10 @@ module HazardDetector_TB0;
         $dumpfile("mult_tb0.vcd");
         $dumpvars;
 
-        $display("A1P\tA1R\tA2P\tA2R\tChkA\tChkB\tIssSt");
-        $monitor("%b\t%b\t%b\t%b\t%b\t%b\t%b",
+        $display("A1P\tA1R\tA2P\tA2R\tChkA\tChkB\tColumn\t\tWreg\tIssSt");
+        $monitor("%b\t%b\t%b\t%b\t%b\t%b\t%h\t%b\t%b",
             iss_ass_pending_a, iss_ass_row_a, iss_ass_pending_b, iss_ass_row_b,
-            iss_check_a, iss_check_b, iss_stalled);
+            iss_check_a, iss_check_b, sb_haz_column, iss_ass_writereg, iss_stalled);
 
         #500 $finish;
     end
@@ -43,6 +49,8 @@ module HazardDetector_TB0;
         iss_ass_pending_b = 1'b0;
         iss_ass_row_a = 5'b00000;
         iss_ass_row_b = 5'b00000;
+        sb_haz_column = 32'h0000_4000;
+        iss_ass_writereg = 1'b0;
         #5 iss_ass_row_a = 5'b00100;
         #5 iss_ass_row_a = 5'b00001;
         #5 iss_ass_row_b = 5'b10000;
@@ -52,6 +60,9 @@ module HazardDetector_TB0;
         #5 iss_ass_row_b = 5'b10000;
         #5 iss_check_b = 1'b0;
         #5 iss_check_b = 1'b1;
+        #5 iss_check_b = 1'b0;
+        #5 iss_ass_writereg = 1'b1;
+        #5 sb_haz_column = 32'h0000_0000;
 
         #500 $finish;
     end
