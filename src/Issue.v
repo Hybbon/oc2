@@ -110,6 +110,8 @@ module Issue (
     wire [4:0] writeaddr;
     wire       enablewrite;
 
+    wire [31:0] sb_haz_column;
+
     Scoreboard SB (
         .clock(clock),
         .reset(reset),
@@ -136,7 +138,9 @@ module Issue (
 
         .writeaddr(writeaddr),
         .registerunit(registerunit),
-        .enablewrite(enablewrite)
+        .enablewrite(enablewrite),
+
+        .sb_haz_column(sb_haz_column)
     );
 
     HazardDetector HDETECTOR (
@@ -154,6 +158,10 @@ module Issue (
         .id_ass_pending_b(id_ass_pending_b),
         .id_ass_row_b(id_ass_row_b),
         .id_check_b(id_hd_check_b),
+
+        .iss_ass_writereg(enablewrite),
+        .sb_haz_column(sb_haz_column),
+
         .id_stalled(hd_id_stall)
     );
 
