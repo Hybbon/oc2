@@ -42,7 +42,7 @@ module Mips_TB;
             mips.REGISTERS.registers[12]
         );
 
-        #30000 $finish;
+        #3000 $finish;
     end
 
     initial begin

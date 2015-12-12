@@ -13,28 +13,37 @@ beq $t0, $t1, beqOk
 nop
 addi $t2, $zero, 20
 beqOk:
+addi $t4, $zero, 60
 bne $t4, $t0, bneOk
 nop
 addi $t2, $zero, 20
 bneOk:
+addi $t4, $zero, 80
 blez $zero, blezOk
 nop
 addi $t2, $zero, 20
 blezOk:
+addi $t4, $zero, 100
 bgtz $t4, bgtzOk
 nop
 addi $t2, $zero, 20
 bgtzOk:
+addi $t4, $zero, 120
 beq $t1, $zero, logicalFailure
+addi $t4, $zero, 140
 nop
 bne $t2, $zero, logicalFailure
+addi $t4, $zero, 160
 nop
 blez $t1, logicalFailure
+addi $t4, $zero, 180
 nop
 bgtz $zero, logicalFailure
+addi $t4, $zero, 200
 nop
 j end
 nop
 logicalFailure:
 addi $t2, $zero, 20
 end:
+addi $t4, $zero, 220
