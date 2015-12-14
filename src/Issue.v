@@ -189,17 +189,22 @@ module Issue (
     // 2'b01: Mem
     // 2'b10: Mult
     reg [1:0] functional_unit;
+    reg prev_stall;
 
-    assign iss_am_oper = functional_unit === 2'b00;
-    assign iss_mem_oper = functional_unit === 2'b01;
-    assign iss_mul_oper = functional_unit === 2'b10;
+    assign iss_am_oper = functional_unit === 2'b00 && !prev_stall;
+    assign iss_mem_oper = functional_unit === 2'b01 && !prev_stall;
+    assign iss_mul_oper = functional_unit === 2'b10 && !prev_stall;
 
     assign iss_reg_addra = id_iss_addra;
     assign iss_reg_addrb = id_iss_addrb;
 
     assign writeaddr = id_iss_regdest;
-    assign registerunit = functional_unit;
-    assign enablewrite = id_iss_writereg && registerunit !== 2'b11;
+    assign enablewrite = id_iss_writereg && registerunit !== 2'b11 && !iss_stall;
+
+    assign registerunit = (id_iss_op === 6'b000000 && id_iss_funct === 6'b011000) ? 
+        2'b10 : (id_iss_op === 6'b101011 || id_iss_op === 6'b100011 ? 2'b01 : (
+        2'b00
+    ));
 
     always @(posedge clock or negedge reset) begin
         if (~reset) begin
@@ -219,6 +224,7 @@ module Issue (
             functional_unit <= 2'b11;
             iss_ex_rega <= 32'h0000_0000;
             iss_ex_regb <= 32'h0000_0000;
+            prev_stall <= 1'b0;
         end else if (~iss_stall) begin
             iss_ex_selalushift <= id_iss_selalushift;
             iss_ex_selimregb <= id_iss_selimregb;
@@ -235,6 +241,7 @@ module Issue (
             iss_ex_shiftamt <= reg_iss_dataa;
             iss_ex_rega <= reg_iss_dataa;
             iss_ex_regb <= reg_iss_datab;
+            prev_stall <= 1'b0;
             if (id_iss_op === 6'b101011 || id_iss_op === 6'b100011) begin
                 // Load, store
                 functional_unit <= 2'b01;
@@ -244,7 +251,7 @@ module Issue (
                 functional_unit <= 2'b00;
             end
         end else begin
-            functional_unit <= 2'b11;
+            prev_stall <= 1'b1;
         end
     end
 
