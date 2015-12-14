@@ -85,7 +85,7 @@ module Issue (
 
     // Branch-related decode and fetch stall
     output hd_id_stall,
-	 output iss_stall
+    output iss_stall
 
 );
 
@@ -165,15 +165,15 @@ module Issue (
         .iss_check_b(id_iss_selregdest),
         .iss_stalled(iss_stall),
 
-		  .id_ass_addr_a(id_hd_ass_addra),
+        .id_ass_addr_a(id_hd_ass_addra),
         .id_ass_pending_a(id_ass_pending_a),
         .id_ass_row_a(id_ass_row_a),
         .id_check_a(id_hd_check_a),
-		  .id_ass_addr_b(id_hd_ass_addrb),
+        .id_ass_addr_b(id_hd_ass_addrb),
         .id_ass_pending_b(id_ass_pending_b),
         .id_ass_row_b(id_ass_row_b),
         .id_check_b(id_hd_check_b),
-		  .iss_ass_writeaddr(writeaddr),
+        .iss_ass_writeaddr(writeaddr),
 
         .iss_ass_writereg(enablewrite),
         .sb_haz_column(sb_haz_column),
@@ -245,7 +245,7 @@ module Issue (
             end
         end else begin
             functional_unit <= 2'b11;
-        end 
+        end
     end
 
 endmodule

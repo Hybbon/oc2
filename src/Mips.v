@@ -27,44 +27,11 @@ module Mips (
     output [31:0] reg_out_4
 );
 
-    
-    // wire              ex_mem_readmem;
-    // wire              ex_mem_writemem;
-    // wire    [31:0]    ex_mem_regb;
-    // wire              ex_mem_selwsource;
-    // wire    [4:0]     ex_mem_regdest;
-    // wire              ex_mem_writereg;
-    // wire    [31:0]    ex_mem_wbvalue;
-    // wire    [4:0]     mem_wb_regdest;
-    // wire              mem_wb_writereg;
-    // wire    [31:0]    mem_wb_wbvalue;
-    // wire              id_ex_selalushift;
-    // wire              id_ex_selimregb;
-    // wire    [2:0]     id_ex_aluop;
-    // wire              id_ex_unsig;
-    // wire    [1:0]     id_ex_shiftop;
-    // wire    [4:0]     id_ex_shiftamt;
-    // wire    [31:0]    id_ex_rega;
-    // wire              id_ex_readmem;
-    // wire              id_ex_writemem;
-    // wire    [31:0]    id_ex_regb;
-    // wire    [31:0]    id_ex_imedext;
-    // wire              id_ex_selwsource;
-    // wire    [4:0]     id_ex_regdest;
-    // wire              id_ex_writereg;
-    // wire              id_ex_writeov;
-    // wire    [4:0]     id_reg_addra;
-    // wire    [4:0]     id_reg_addrb;
-    // wire    [31:0]    reg_id_dataa;
-    // wire    [31:0]    reg_id_datab;
-    // wire    [31:0]    reg_id_ass_dataa;
-    // wire    [31:0]    reg_id_ass_datab;
 
     // Stall from the issue stage to Decode and Fetch
     wire              id_stall;
-	 
-	 // Avoid stall deadlock
-	 wire iss_stall;
+    // Avoid stall deadlock
+    wire iss_stall;
 
     ///////////
     // Fetch //
@@ -168,8 +135,8 @@ module Mips (
         .id_iss_funct(id_iss_funct),
 
         .id_stall(id_stall),
-		  .iss_stall(iss_stall),
-		  
+        .iss_stall(iss_stall),
+
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
 
@@ -282,7 +249,7 @@ module Mips (
         .id_ass_waw_write_writereg(id_ass_waw_write_writereg),
 
         .hd_id_stall(id_stall),
-		  .iss_stall(iss_stall)
+        .iss_stall(iss_stall)
     );
 
     // Alumisc outputs
