@@ -39,6 +39,8 @@ module Decode (
 
     // Keeps the current instruction
     input id_stall,
+	 
+	 input iss_stall, // For stall deadlock prevention
 
     // Register interface
     // Addresses are obtained asynchronally via Control. They're, then, for-
@@ -168,7 +170,11 @@ module Decode (
 
                 id_iss_addra <= id_reg_addra;
                 id_iss_addrb <= id_reg_addrb;
-            end
+            end else begin
+				    if (~iss_stall) begin
+				        id_iss_writereg <= 1'b0;
+					 end
+				end
             if (id_if_selpcsource) begin
                 discard_instruction <= 1'b1;
             end else begin

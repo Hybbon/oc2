@@ -19,12 +19,15 @@ module HazardDetector (
     output iss_stalled,
 
     // Decode interface
+	 input [4:0] id_ass_addr_a,
     input id_ass_pending_a,
     input [4:0] id_ass_row_a,
     input id_check_a, // 1 = check both registers, 0 = check 'a' only
+	 input [4:0] id_ass_addr_b,
     input id_ass_pending_b,
     input [4:0] id_ass_row_b,
     input id_check_b,
+	 input [4:0] iss_ass_writeaddr,
 
     // Writeback structural hazard check
     input iss_ass_writereg,
@@ -48,6 +51,11 @@ assign iss_stalled =
 
 // Note: Decode and Fetch must also be stalled when Issue is stalled.
 assign id_stalled = iss_stalled || (
+        iss_ass_writereg && (
+            (id_check_a && id_ass_addr_a === iss_ass_writeaddr) ||
+				(id_check_b && id_ass_addr_b === iss_ass_writeaddr)
+        )
+	 ) || (
     id_check_a &&
     (id_ass_pending_a && !(id_ass_row_a[0]) || id_ass_row_a[4:1] != 0) ||
     id_check_b &&

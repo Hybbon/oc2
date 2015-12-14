@@ -62,6 +62,9 @@ module Mips (
 
     // Stall from the issue stage to Decode and Fetch
     wire              id_stall;
+	 
+	 // Avoid stall deadlock
+	 wire iss_stall;
 
     ///////////
     // Fetch //
@@ -165,6 +168,8 @@ module Mips (
         .id_iss_funct(id_iss_funct),
 
         .id_stall(id_stall),
+		  .iss_stall(iss_stall),
+		  
         .id_reg_addra(id_reg_addra),
         .id_reg_addrb(id_reg_addrb),
 
@@ -276,7 +281,8 @@ module Mips (
         .id_ass_waw_write_addr(id_ass_waw_write_addr),
         .id_ass_waw_write_writereg(id_ass_waw_write_writereg),
 
-        .hd_id_stall(id_stall)
+        .hd_id_stall(id_stall),
+		  .iss_stall(iss_stall)
     );
 
     // Alumisc outputs
